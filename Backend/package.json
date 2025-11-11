@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Backend for AI-Image-Caption-Generator",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "npm nodemon src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
