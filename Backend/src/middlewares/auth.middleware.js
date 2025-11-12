@@ -8,7 +8,7 @@ export const verifyTokens = asyncHandler(async (req, _, next) => {
     req?.cookies?.accessToken ||
     req?.header("Authorizarion")?.replace("Bearer ", "");
 
-  if (!token) throw new ApiError(400, "Token not Found");
+  if (!token) throw new ApiError(404, "Token not Found");
 
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
   if (!decodedToken) throw new ApiError(500, "Unable to Decode Token");
