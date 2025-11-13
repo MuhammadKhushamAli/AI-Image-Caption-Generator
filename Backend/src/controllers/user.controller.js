@@ -81,6 +81,7 @@ export const login = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "none",
   };
 
   return res
@@ -120,6 +121,7 @@ export const refreshTokens = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "none",
   };
   res
     .status(200)
@@ -194,7 +196,7 @@ export const getUserHistory = asyncHandler(async (req, res) => {
               _id: 1,
               name: 1,
               image: 1,
-              caption: 1
+              caption: 1,
             },
           },
         ],
@@ -207,16 +209,18 @@ export const getUserHistory = asyncHandler(async (req, res) => {
     },
   ]);
   if (!history) throw new ApiError(500, "Unable to Aggregate History");
-  
+
   const options = {
     page,
-    limit: 10
+    limit: 10,
   };
-  
+
   const painatedHistory = await User.aggregatePaginate(history, options);
   if (!painatedHistory) throw new ApiError(500, "Unable to Paginate History");
 
   res
     .status(200)
-    .json(new ApiResponse(200, "History Fetched Successfully", painatedHistory));
+    .json(
+      new ApiResponse(200, "History Fetched Successfully", painatedHistory)
+    );
 });
