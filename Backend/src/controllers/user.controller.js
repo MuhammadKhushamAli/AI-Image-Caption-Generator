@@ -179,3 +179,45 @@ export const changePassword = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, "Password Successfully Changed"));
 });
+
+export const getUserHistory = asyncHandler(async (req, res) => {
+  const { page = 1, userName } = req?.query;
+  page = int(page);
+  userName = userName?.trim();
+  if (page <= 0) page = 1;
+  if (!userName) throw new ApiError(400, "User Name is Required");
+
+  const history = User.aggregate([
+    {
+      $match: {
+        userName,
+      },
+    },
+    {
+      $lookup: {
+        from: "chats",
+        localField: "history",
+        foreignField: "_id",
+        as: "history",
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        history: 1,
+      },
+    },
+  ]);
+  if (!history) throw new ApiError(500, "Unable to Fetch History");
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "History Fetched Successfully", history[0]));
+});

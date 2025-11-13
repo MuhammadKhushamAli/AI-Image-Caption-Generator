@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
 
 const chatSchema = mongoose.Schema(
   {
@@ -19,12 +18,15 @@ const chatSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
-
-chatSchema.plugin(mongooseAggregatePaginate);
 
 export const Chat = mongoose.model("Chat", chatSchema);
