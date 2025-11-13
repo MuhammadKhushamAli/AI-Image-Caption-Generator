@@ -14,41 +14,51 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <IsAuth>
-            <Home />
-          </IsAuth>
+          <>
+          </>
+          // <IsAuth>
+          //   <Home />
+          // </IsAuth>
         ),
       },
       {
         path: "/signup",
         element: (
-          <IsAuth>
-            <SignUp />
-          </IsAuth>
+          <>
+          </>
+          // <IsAuth>
+          //   <SignUp />
+          // </IsAuth>
         ),
       },
       {
         path: "/login",
         element: (
-          <IsAuth>
-            <Login />
-          </IsAuth>
+          <>
+          </>
+          // <IsAuth>
+          //   <Login />
+          // </IsAuth>
         ),
       },
       {
         path: "/history",
         element: (
-          <IsAuth>
-            <History />
-          </IsAuth>
+          <>
+          </>
+          // <IsAuth>
+          //   <History />
+          // </IsAuth>
         ),
       },
       {
         path: "/chat:chatID",
         element: (
-          <IsAuth>
-            <Chat />
-          </IsAuth>
+          <>
+          </>
+          // <IsAuth>
+          //   <Chat />
+          // </IsAuth>
         ),
       },
     ],
@@ -58,7 +68,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </Provider>
   </StrictMode>
 );
