@@ -1,8 +1,7 @@
-import { use } from "react";
 import { Chat } from "../models/chat.model.js";
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiRespnse";
+import { ApiResponse } from "../utils/ApiRespnse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js";
 
@@ -10,7 +9,7 @@ export const addChat = asyncHandler(async (req, res) => {
   const image = req?.file?.path;
   if (!image) throw new ApiError(400, "Image Must be Required");
 
-  const { caption } = req?.body;
+  let { caption } = req?.body;
   caption = caption?.trim();
   if (!caption) throw new ApiError(400, "Caption Must be Required");
 
@@ -18,7 +17,7 @@ export const addChat = asyncHandler(async (req, res) => {
   if (!cloudImage)
     throw new ApiError(500, "Unable to Upload Image on Cloudinary");
 
-  const chat = Chat.create({
+  const chat = await Chat.create({
     name: req?.file?.filename,
     caption,
     image: cloudImage?.url,
@@ -41,12 +40,12 @@ export const addChat = asyncHandler(async (req, res) => {
 });
 
 export const viewChat = asyncHandler(async (req, res) => {
-  const { chatID } = req?.params;
+  let { chatID } = req?.params;
   chatID = chatID?.trim();
 
   if (!chatID) throw new ApiError(400, "Chat ID Must be Required");
 
-  const chat = await Chat.findOne({ _id: chatID, owner: req?.user?._id });
+  const chat = await Chat.findOne({ _id: chatID, owner: req?.user?._id }).select("-owner");
   if (!chat) throw new ApiError(404, "Chat Not Found");
 
   res
@@ -55,7 +54,7 @@ export const viewChat = asyncHandler(async (req, res) => {
 });
 
 export const deleteChat = asyncHandler(async (req, res) => {
-    const {chatID} = req?.params;
+    let {chatID} = req?.params;
     chatID = chatID?.trim();
     if(!chatID) throw new ApiError(400, "Chat ID Must be Required");
 

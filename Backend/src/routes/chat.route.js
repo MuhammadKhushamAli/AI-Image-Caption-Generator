@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { verifyTokens } from "../middlewares/auth.middleware";
+import { verifyTokens } from "../middlewares/auth.middleware.js";
 import {
     addChat,
     deleteChat,
     viewChat
-} from "../controllers/chat.controller";
+} from "../controllers/chat.controller.js";
 import { uploader } from "../middlewares/multer.middleware.js";
 
 const router = Router();

@@ -49,31 +49,17 @@ export const registerUser = asyncHandler(async (req, res) => {
   });
   if (!newUser) throw new ApiError(500, "Cannot Create User");
 
-  const { refreshToken, accessToken } =
-    await generateAccessAndRefreshToken(newUser);
-
-  const user = await findById(newUser?._id).select("-password -refreshToken");
+  const user = await User.findById(newUser?._id).select(
+    "-password -refreshToken"
+  );
   if (!user) throw new ApiError(500, "User is not Created");
-
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
   return res
     .status(200)
-    .cookie("refreshToken", refreshToken, options)
-    .cookie("accessToken", accessToken, options)
-    .json(
-      new ApiResponse(200, "User Successfully Created", {
-        user,
-        refreshToken,
-        accessToken,
-      })
-    );
+    .json(new ApiResponse(200, "User Successfully Created", user));
 });
 
 export const login = asyncHandler(async (req, res) => {
-  const { email, password } = req?.body;
+  let { email, password } = req?.body;
   email = email?.trim();
   if (!(email && password))
     throw new ApiError(400, "Both Email and Password Required");
@@ -81,7 +67,8 @@ export const login = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) throw new ApiError(404, "User not Found");
 
-  if (user?.refreshToken) throw new ApiError(409, "Already Logged In");
+  if (!(await user.isPasswordValid(password)))
+    throw new ApiError(401, "Incorrect Password");
 
   const { refreshToken, accessToken } =
     await generateAccessAndRefreshToken(user);
@@ -92,7 +79,7 @@ export const login = asyncHandler(async (req, res) => {
   if (!loggedInUser) throw new ApiError(500, "Unable to get User Detail");
 
   const options = {
-    httpsOnly: true,
+    httpOnly: true,
     secure: true,
   };
 
@@ -163,7 +150,7 @@ export const logout = asyncHandler(async (req, res) => {
 });
 
 export const changePassword = asyncHandler(async (req, res) => {
-  const [oldPassword, newPassword] = req?.body;
+  const { oldPassword, newPassword } = req?.body;
 
   if (!(oldPassword && newPassword))
     throw new ApiError(400, "All Fields Are Required");
@@ -174,6 +161,8 @@ export const changePassword = asyncHandler(async (req, res) => {
   if (!(await user.isPasswordValid(oldPassword)))
     throw new ApiError(401, "Invalid Old Password");
 
+  if (oldPassword === newPassword)
+    throw new ApiError(409, "Same New Password as Old Password");
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
 
@@ -181,8 +170,8 @@ export const changePassword = asyncHandler(async (req, res) => {
 });
 
 export const getUserHistory = asyncHandler(async (req, res) => {
-  const { page = 1, userName } = req?.query;
-  page = int(page);
+  let { page = 1, userName } = req?.query;
+  page = parseInt(page);
   userName = userName?.trim();
   if (page <= 0) page = 1;
   if (!userName) throw new ApiError(400, "User Name is Required");
@@ -204,6 +193,8 @@ export const getUserHistory = asyncHandler(async (req, res) => {
             $project: {
               _id: 1,
               name: 1,
+              image: 1,
+              caption: 1
             },
           },
         ],
@@ -215,9 +206,17 @@ export const getUserHistory = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  if (!history) throw new ApiError(500, "Unable to Fetch History");
+  if (!history) throw new ApiError(500, "Unable to Aggregate History");
+  
+  const options = {
+    page,
+    limit: 10
+  };
+  
+  const painatedHistory = await User.aggregatePaginate(history, options);
+  if (!painatedHistory) throw new ApiError(500, "Unable to Paginate History");
 
   res
     .status(200)
-    .json(new ApiResponse(200, "History Fetched Successfully", history[0]));
+    .json(new ApiResponse(200, "History Fetched Successfully", painatedHistory));
 });
