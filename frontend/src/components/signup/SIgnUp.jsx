@@ -11,31 +11,37 @@ export function SignUp() {
   const { register, handleSubmit, watch, setValue } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const submitForm = useCallback(async (data) => {
-    setError('');
-    try {
-      const response = await axiosInstance.post(
-        "/api/v1/users/register-user",
-        data
-      );
-      if (response.statusCode === 200) {
-        const logInResponse = await axiosInstance.post("/api/v1/users/login", {
-          email: data.email,
-          password: data.password,
-        });
-        if (logInResponse.statusCode === 200) {
-          dispatch(login({ userData: logInResponse.data.user }));
-          navigate("/");
+  const submitForm = useCallback(
+    async (data) => {
+      setError("");
+      try {
+        const response = await axiosInstance.post(
+          "/api/v1/users/register-user",
+          data
+        );
+        if (response.statusCode === 200) {
+          const logInResponse = await axiosInstance.post(
+            "/api/v1/users/login",
+            {
+              email: data.email,
+              password: data.password,
+            }
+          );
+          if (logInResponse.statusCode === 200) {
+            dispatch(login({ userData: logInResponse.data.user }));
+            navigate("/");
+          } else {
+            setError(logInResponse.message);
+          }
         } else {
-          setError(logInResponse.message);
+          setError(response.message);
         }
-      } else {
-        setError(response.message);
+      } catch (error) {
+        setError(error);
       }
-    } catch (error) {
-      setError(error);
-    }
-  }, [dispatch, navigate]);
+    },
+    [dispatch, navigate]
+  );
   const slugTransformation = useCallback((value) => {
     if (value && typeof value === "string") {
       return value
@@ -57,12 +63,13 @@ export function SignUp() {
   }, [slugTransformation, watch, setValue]);
   return (
     <Container className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8">
+      {error && <Error error={error} />}
       <div className="w-full max-w-md relative">
         {/* Background glow effect */}
         <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 blur-3xl rounded-3xl opacity-50"></div>
-        
+
         {/* Form container */}
-        <form 
+        <form
           onSubmit={handleSubmit(submitForm)}
           className="relative backdrop-blur-xl bg-linear-to-br from-slate-900/90 via-purple-900/70 to-slate-900/90 border border-cyan-500/30 rounded-2xl p-8 sm:p-10 shadow-[0_0_50px_rgba(0,255,255,0.15)] space-y-6"
         >
@@ -71,7 +78,9 @@ export function SignUp() {
             <h1 className="text-3xl sm:text-4xl font-bold bg-linear-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
               Create Account
             </h1>
-            <p className="text-gray-400 text-sm">Join us and start your journey</p>
+            <p className="text-gray-400 text-sm">
+              Join us and start your journey
+            </p>
           </div>
 
           {/* Input fields */}
@@ -125,14 +134,6 @@ export function SignUp() {
               })}
             />
           </div>
-
-          {/* Error message */}
-          {error && (
-            <div className="relative p-4 rounded-lg border border-red-500/50 bg-red-500/10 backdrop-blur-sm">
-              <p className="text-red-400 text-sm font-medium">{error}</p>
-              <div className="absolute inset-0 rounded-lg bg-red-500/5 blur-sm"></div>
-            </div>
-          )}
 
           {/* Submit button */}
           <Button
