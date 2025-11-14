@@ -6,6 +6,7 @@ import { axiosInstance } from "../../axios/axios.js";
 import { useDispatch } from "react-redux";
 import { login } from "../../features/authentication/authSlice.js";
 import { useNavigate } from "react-router";
+import { Button } from "../Button.jsx";
 
 export function Login() {
   const { register, handleSubmit } = useForm();

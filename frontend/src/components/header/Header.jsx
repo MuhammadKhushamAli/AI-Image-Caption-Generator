@@ -1,9 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "../Button";
-import { login, logout } from "../../features/authentication/authSlice";
-import { axiosInstance } from "../../axios/axios";
+import { Button } from "../Button.jsx";
+import { login, logout } from "../../features/authentication/authSlice.js";
+import { axiosInstance } from "../../axios/axios.js";
 
 export function Header() {
   const isLogin = useSelector((state) => state.auth.loginStatus);

@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
-import { Container, Input, Button } from "../index.js";
+import { Container } from "../container/Container.jsx";
+import { Button } from "../Button.jsx";
+import { Input } from "../Input.jsx";
 import { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../../axios/axios.js";
 import { useDispatch } from "react-redux";

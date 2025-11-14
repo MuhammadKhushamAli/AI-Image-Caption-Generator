@@ -1,7 +1,9 @@
-import { Container } from "./container/Container";
-import { Header } from "./header/Header";
-import { Button } from "./Button";
-import { Input } from "./Input";
-import { Login } from "./login/Login";
+import { Container } from "./container/Container.jsx";
+import { Header } from "./header/Header.jsx";
+import { Login } from "./login/Login.jsx";
+import { SignUp } from "./signup/SIgnUp.jsx";
+import { Home } from "./home/Home.jsx";
+import { History } from "./history/History.jsx";
+import { ChatCard } from "./chatCard/ChatCard.jsx";
 
-export { Container, Header, Button, Input, Login };
+export { Container, Header, Login, SignUp, Home, History, ChatCard };

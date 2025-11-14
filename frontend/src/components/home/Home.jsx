@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { Button, Container, Input } from "../index.js";
+import { Button } from "../Button.jsx";
+import { Container } from "../container/Container.jsx";
 import { useDropZone } from "react-dropzone";
 import Webcam from "react-webcam";
 
