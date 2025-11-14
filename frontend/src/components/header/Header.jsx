@@ -33,7 +33,7 @@ export function Header() {
     },
     {
       name: "Register",
-      path: "/register",
+      path: "/signup",
       isVisible: !isLogin,
     },
   ], [isLogin]);
