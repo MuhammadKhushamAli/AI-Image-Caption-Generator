@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "./app/store.js";
+import { Login } from "./components/index.js";
 
 const router = createBrowserRouter([
   {
@@ -34,8 +35,7 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: (
-          <>
-          </>
+          <Login />
           // <IsAuth>
           //   <Login />
           // </IsAuth>

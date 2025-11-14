@@ -5,6 +5,7 @@ function App() {
   return (
     <Container>
       <Header />
+      <Outlet />
     </Container>
   );
 }
