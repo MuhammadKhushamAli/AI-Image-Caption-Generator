@@ -198,7 +198,7 @@ export function Home() {
                 ? 'border-cyan-400/70 shadow-[0_0_60px_rgba(0,255,255,0.3)] scale-[1.02]' 
                 : 'border-cyan-500/30 hover:border-cyan-400/50 hover:shadow-[0_0_60px_rgba(0,255,255,0.25)]'
               }`}>
-              <Input {...getInputProps()} className="hidden" />
+              <input {...getInputProps()} className="hidden" />
               
               <div className="text-center">
                 {/* Upload Icon */}
