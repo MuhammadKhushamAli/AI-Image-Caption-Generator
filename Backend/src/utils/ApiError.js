@@ -17,6 +17,13 @@ class ApiError extends Error {
     } else {
       Error.captureStackTrace(this, this.constructor);
     }
+
+    Object.defineProperty(this, "message", {
+      value: message,
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    });
   }
 }
 
