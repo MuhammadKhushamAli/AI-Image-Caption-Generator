@@ -17,32 +17,37 @@ export function History() {
   const userData = useSelector((state) => state?.auth?.userData);
   const navigate = useNavigate();
 
-  useEffect(async () => {
-    setIsLoading(true);
-    setError("");
-    try {
-      if (isLoggedIn) {
-        const historyResponse = await axiosInstance.get("/api/v1/users", {
-          params: { userName: userData?.userName, page: currentPage },
-        });
-        if (historyResponse?.statusCode === 200) {
-          const newHistory = historyResponse?.data?.docs?.[0]?.history || [];
-          setUserHistory((prev) => [
-            ...prev,
-            ...newHistory,
-          ]);
-          isNextPage.current = historyResponse?.data?.hasNextPage;
+  useEffect(() => {
+    const fetchHistory = async () => {
+      setIsLoading(true);
+      setError("");
+      try {
+        if (isLoggedIn) {
+          const historyResponse = await axiosInstance.get("/api/v1/users/user-history", {
+            params: { userName: userData?.userName, page: currentPage },
+          });
+          if (historyResponse?.statusCode === 200) {
+            const newHistory = historyResponse?.data?.docs?.[0]?.history || [];
+            setUserHistory((prev) => [
+              ...prev,
+              ...newHistory,
+            ]);
+            isNextPage.current = historyResponse?.data?.hasNextPage;
+          } else {
+            setError(historyResponse?.message);
+          }
         } else {
-          setError(historyResponse?.message);
+          navigate("/login");
         }
-      } else {
-        navigate("/login");
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setError(error);
-    }
-    setIsLoading(false);
-  }, [currentPage]);
+    };
+    
+    fetchHistory();
+  }, [currentPage, isLoggedIn, userData?.userName, navigate]);
 
   useEffect(() => {
     const handleScroll = () => {

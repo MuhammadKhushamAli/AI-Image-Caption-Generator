@@ -1,7 +1,7 @@
-export function Container({children, className})
+export function Container({children, className = ""})
 {
     return <div
-    className={`${className}`}
+    className={className}
     >
         {children}
     </div>

@@ -12,22 +12,26 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(async () => {
-    setIsLoading(true);
-    setError("");
-    try {
-      const currentUserResponse = await axiosInstance.get(
-        "/api/v1/users/current-user"
-      );
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      setIsLoading(true);
+      setError("");
+      try {
+        const currentUserResponse = await axiosInstance.get(
+          "/api/v1/users/current-user"
+        );
 
-      if (currentUserResponse.statusCode === 200) {
-        dispatch(login({ userData: currentUserResponse?.data }));
+        if (currentUserResponse.statusCode === 200) {
+          dispatch(login({ userData: currentUserResponse?.data }));
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+    
+    fetchCurrentUser();
   }, [dispatch]);
   return isLoading ? (
     <Loading />
