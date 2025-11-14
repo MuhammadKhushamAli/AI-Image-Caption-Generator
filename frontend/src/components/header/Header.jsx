@@ -39,7 +39,7 @@ export function Header() {
   ], [isLogin]);
   
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-linear-to-r from-slate-900/80 via-purple-900/60 to-slate-900/80 border-b border-cyan-500/30 shadow-[0_0_30px_rgba(0,255,255,0.1)]">
+    <header className="fixed top-0 left-0 right-0 z-30 backdrop-blur-xl bg-linear-to-r from-slate-900/80 via-purple-900/60 to-slate-900/80 border-b border-cyan-500/30 shadow-[0_0_30px_rgba(0,255,255,0.1)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}

@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { Button } from "../Button.jsx";
 import { Container } from "../container/Container.jsx";
-import { useDropZone } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import Webcam from "react-webcam";
 
 export function Home() {
@@ -48,7 +48,7 @@ export function Home() {
     SetIsCapturing(false);
   }, []);
 
-  const { getRootProps, getInputProps, isDropActive } = useDropZone({
+  const { getRootProps, getInputProps, isDropActive } = useDropzone({
     onDrop,
     accept: { "image/*": [] },
     multiple: false,

@@ -20,7 +20,7 @@ function App() {
         const currentUserResponse = await axiosInstance.get(
           "/api/v1/users/current-user"
         );
-
+        console.log(currentUserResponse);
         if (currentUserResponse.statusCode === 200) {
           dispatch(login({ userData: currentUserResponse?.data }));
         }
