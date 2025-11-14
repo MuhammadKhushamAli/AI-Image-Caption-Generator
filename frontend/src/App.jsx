@@ -20,12 +20,11 @@ function App() {
         const currentUserResponse = await axiosInstance.get(
           "/api/v1/users/current-user"
         );
-        console.log(currentUserResponse);
-        if (currentUserResponse.statusCode === 200) {
-          dispatch(login({ userData: currentUserResponse?.data }));
+        if (currentUserResponse.status === 200) {
+          dispatch(login({ userData: currentUserResponse?.data?.data }));
         }
       } catch (error) {
-        setError(error);
+        setError(error?.response?.data?.message);
       } finally {
         setIsLoading(false);
       }

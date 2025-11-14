@@ -26,15 +26,16 @@ export function History() {
           const historyResponse = await axiosInstance.get("/api/v1/users/user-history", {
             params: { userName: userData?.userName, page: currentPage },
           });
-          if (historyResponse?.statusCode === 200) {
-            const newHistory = historyResponse?.data?.docs?.[0]?.history || [];
+          if (historyResponse?.status === 200) {
+            setError(historyResponse?.data?.message);
+            const newHistory = historyResponse?.data?.data?.docs?.[0]?.history || [];
             setUserHistory((prev) => [
               ...prev,
               ...newHistory,
             ]);
-            isNextPage.current = historyResponse?.data?.hasNextPage;
+            isNextPage.current = historyResponse?.data?.data?.hasNextPage;
           } else {
-            setError(historyResponse?.message);
+            setError(historyResponse?.response?.data?.message);
           }
         } else {
           navigate("/login");

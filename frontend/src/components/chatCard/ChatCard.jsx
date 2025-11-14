@@ -21,15 +21,15 @@ export function ChatCard() {
       if (isLoggedIn) {
         try {
           const chatResponse = await axiosInstance.get(
-            `/api/v1/chat/${chatId}`
+            `/api/v1/chat/view-chat${chatId}`
           );
-          if (chatResponse?.statusCode === 200) {
-            setChat(chatResponse?.data);
+          if (chatResponse?.status === 200) {
+            setChat(chatResponse?.data?.data);
           } else {
-            setError(chatResponse?.message);
+            setError(chatResponse?.response?.data?.message);
           }
         } catch (err) {
-          setError(err?.message || "Failed to load chat");
+          setError(err?.response?.data?.message|| "Failed to load chat");
         } finally {
           setIsLoading(false);
         }

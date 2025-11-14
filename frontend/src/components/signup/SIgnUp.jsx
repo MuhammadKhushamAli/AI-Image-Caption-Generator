@@ -24,7 +24,8 @@ export function SignUp() {
           "/api/v1/users/register-user",
           data
         );
-        if (response.statusCode === 200) {
+        if (response.status === 200) {
+          setError(response.data.message);
           const logInResponse = await axiosInstance.post(
             "/api/v1/users/login",
             {
@@ -32,17 +33,17 @@ export function SignUp() {
               password: data.password,
             }
           );
-          if (logInResponse.statusCode === 200) {
-            dispatch(login({ userData: logInResponse.data.user }));
+          if (logInResponse.status === 200) {
+            dispatch(login({ userData: logInResponse.data.data.user }));
             navigate("/");
           } else {
-            setError(logInResponse.response.data);
+            setError(logInResponse.response.data.message);
           }
         } else {
-          setError(logInResponse.response.data);
+          setError(logInResponse.response.data.message);
         }
       } catch (error) {
-        setError(error.response.data);
+        setError(error.response.data.message);
       } finally {
         setIsLoading(false);
       }
