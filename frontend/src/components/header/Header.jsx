@@ -1,13 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
+import { useSelector} from "react-redux";
+import { useMemo, useState } from "react";
 import { Button } from "../Button.jsx";
-import { login, logout } from "../../features/authentication/authSlice.js";
+import { logout } from "../../features/authentication/authSlice.js";
 import { axiosInstance } from "../../axios/axios.js";
 
 export function Header() {
   const isLogin = useSelector((state) => state.auth.loginStatus);
-  const dispatch = useDispatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -38,13 +37,6 @@ export function Header() {
       isVisible: !isLogin,
     },
   ], [isLogin]);
-
-  useEffect( async () => {
-    const userData = await axiosInstance.get("/api/v1/users/current-user");
-    if(userData.status === 200) {
-      dispatch(login({userData: userData.data}));
-    }
-  }, []);
   
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-linear-to-r from-slate-900/80 via-purple-900/60 to-slate-900/80 border-b border-cyan-500/30 shadow-[0_0_30px_rgba(0,255,255,0.1)]">

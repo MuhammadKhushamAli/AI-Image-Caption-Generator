@@ -5,26 +5,33 @@ import { useDispatch } from "react-redux";
 import { axiosInstance } from "./axios/axios.js";
 import { login } from "./features/authentication/authSlice.js";
 import { Error } from "./components/Error.jsx";
+import { Loading } from "./components/Loading.jsx";
 
 function App() {
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    setError('');
+    setIsLoading(true);
+    setError("");
     try {
-      const currentUserResponse = await axiosInstance.get("/api/v1/users/current-user");
-      
-      if(currentUserResponse.statusCode === 200)
-      {
-        dispatch(login({userData: currentUserResponse?.data}));
+      const currentUserResponse = await axiosInstance.get(
+        "/api/v1/users/current-user"
+      );
+
+      if (currentUserResponse.statusCode === 200) {
+        dispatch(login({ userData: currentUserResponse?.data }));
       }
-      
     } catch (error) {
       setError(error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [])
-  return (
+  }, [dispatch]);
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Container>
       {error && <Error error={error} />}
       <Header />

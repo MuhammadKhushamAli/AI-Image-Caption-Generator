@@ -7,27 +7,35 @@ import { useDispatch } from "react-redux";
 import { login } from "../../features/authentication/authSlice.js";
 import { useNavigate } from "react-router";
 import { Button } from "../Button.jsx";
+import { Error } from "../Error.jsx";
 
 export function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onSubmit = useCallback(async (data) => {
-    setError("");
-    try {
-      const response = await axiosInstance.post("/api/v1/users/login", data);
+  const onSubmit = useCallback(
+    async (data) => {
+      setIsLoading(true);
+      setError("");
+      try {
+        const response = await axiosInstance.post("/api/v1/users/login", data);
 
-      if (response.statusCode == 200) {
-        dispatch(login({ userData: response.data.user }));
-        navigate("/");
-      } else {
-        setError(response.message);
+        if (response.statusCode == 200) {
+          dispatch(login({ userData: response.data.user }));
+          navigate("/");
+        } else {
+          setError(response.message);
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setError(error);
-    }
-  });
+    },
+    [dispatch, navigate]
+  );
   return (
     <Container className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8">
       {error && <Error error={error} />}
@@ -57,6 +65,7 @@ export function Login() {
               type="email"
               placeholder="Enter your email"
               className="futuristic-input"
+              disabled={isLoading}
               {...register("email", {
                 required: true,
                 validate: {
@@ -72,6 +81,7 @@ export function Login() {
               type="password"
               placeholder="Enter your password"
               className="futuristic-input"
+              disabled={isLoading}
               {...register("password", {
                 required: true,
                 validate: {
@@ -86,18 +96,28 @@ export function Login() {
           {/* Submit button */}
           <Button
             type="submit"
-            className="relative w-full px-6 py-3.5 text-base font-semibold rounded-lg transition-all duration-300 group
+            disabled={isLoading}
+            className={`relative w-full px-6 py-3.5 text-base font-semibold rounded-lg transition-all duration-300 group
                             text-gray-100 bg-linear-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-400/50 
                             hover:text-cyan-300 hover:border-cyan-400/70 hover:bg-linear-to-r hover:from-cyan-500/30 hover:to-purple-500/30
                             before:absolute before:inset-0 before:rounded-lg before:bg-linear-to-r before:from-cyan-500/0 before:via-purple-500/0 before:to-cyan-500/0 
                             before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300
                             after:absolute after:inset-0 after:rounded-lg after:bg-linear-to-r after:from-cyan-500/20 after:via-purple-500/20 after:to-cyan-500/20 
                             after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300 after:blur-sm
-                            hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] active:scale-95 mt-6"
+                            hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] active:scale-95 mt-6
+                            ${
+                              isLoading ? "opacity-75 cursor-not-allowed" : ""
+                            }`}
           >
-            <span className="relative z-10 flex items-center justify-center">
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              {isLoading && (
+                <div className="relative w-5 h-5">
+                  <div className="absolute inset-0 border-2 border-cyan-400/30 rounded-full"></div>
+                  <div className="absolute inset-0 border-2 border-transparent border-t-cyan-400 border-r-purple-400 rounded-full animate-spin"></div>
+                </div>
+              )}
               <span className="absolute left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
-              Sign In
+              {isLoading ? "Signing in..." : "Sign In"}
             </span>
           </Button>
         </form>

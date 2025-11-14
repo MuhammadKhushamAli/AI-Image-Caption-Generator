@@ -5,17 +5,20 @@ import { useNavigate } from "react-router";
 import { Container } from "../container/Container.jsx";
 import { HistoryCard } from "./HIstoryCard.jsx";
 import { Link } from "react-router-dom";
+import { Error } from "../Error.jsx";
 
 export function History() {
   const [error, setError] = useState("");
   const [userHistory, setUserHistory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const isNextPage = useRef(false);
   const isLoggedIn = useSelector((state) => state?.auth?.loginStatus);
   const userData = useSelector((state) => state?.auth?.userData);
   const navigate = useNavigate();
 
   useEffect(async () => {
+    setIsLoading(true);
     setError("");
     try {
       if (isLoggedIn) {
@@ -38,6 +41,7 @@ export function History() {
     } catch (error) {
       setError(error);
     }
+    setIsLoading(false);
   }, [currentPage]);
 
   useEffect(() => {
@@ -88,14 +92,32 @@ export function History() {
           </div>
           
           {/* Loading indicator for infinite scroll */}
-          {isNextPage.current && (
+          {(isLoading || isNextPage.current) && (
             <div className="mt-12 flex justify-center">
               <div className="relative">
-                <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 blur-xl rounded-full opacity-50"></div>
-                <div className="relative backdrop-blur-xl bg-linear-to-br from-slate-900/90 via-purple-900/70 to-slate-900/90 border border-cyan-500/30 rounded-xl px-6 py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin"></div>
-                    <span className="text-cyan-300 text-sm font-medium">Loading more...</span>
+                {/* Outer glow effect */}
+                <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 blur-2xl rounded-full opacity-50 animate-pulse"></div>
+                
+                {/* Loading ring container */}
+                <div className="relative backdrop-blur-xl bg-linear-to-br from-slate-900/90 via-purple-900/70 to-slate-900/90 border border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_30px_rgba(0,255,255,0.15)]">
+                  <div className="flex flex-col items-center gap-4">
+                    {/* Animated loading ring */}
+                    <div className="relative w-16 h-16">
+                      {/* Outer ring */}
+                      <div className="absolute inset-0 border-4 border-cyan-500/20 rounded-full"></div>
+                      {/* Animated ring */}
+                      <div className="absolute inset-0 border-4 border-transparent border-t-cyan-400 border-r-purple-400 rounded-full animate-spin"></div>
+                      {/* Inner glow */}
+                      <div className="absolute inset-2 bg-linear-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-sm"></div>
+                      {/* Center dot */}
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
+                    </div>
+                    
+                    {/* Loading text */}
+                    <div className="text-center">
+                      <p className="text-cyan-300 text-sm font-medium mb-1">Loading more cards</p>
+                      <p className="text-gray-500 text-xs">Please wait...</p>
+                    </div>
                   </div>
                 </div>
               </div>
