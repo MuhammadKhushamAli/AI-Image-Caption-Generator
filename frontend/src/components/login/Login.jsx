@@ -72,7 +72,7 @@ export function Login() {
                   matchPattern: (value) =>
                     /^(?=.{1,254}$)(?=.{1,64}@)(?![.])(?!.*\.\.)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+(?<![.])@(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$/.test(
                       value
-                    ) || "Invalid email address",
+                    ) || setError("Invalid email address"),
                 },
               })}
             />
@@ -87,7 +87,7 @@ export function Login() {
                 validate: {
                   matchPattern: (value) =>
                     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value) ||
-                    "Password must contain at least 8 characters, including at least one letter and one number",
+                    setError("Password must contain at least 8 characters, including at least one letter and one number"),
                 },
               })}
             />
@@ -116,7 +116,7 @@ export function Login() {
                   <div className="absolute inset-0 border-2 border-transparent border-t-cyan-400 border-r-purple-400 rounded-full animate-spin"></div>
                 </div>
               )}
-              <span className="absolute left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300 pointer-events-none"></span>
               {isLoading ? "Signing in..." : "Sign In"}
             </span>
           </Button>

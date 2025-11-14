@@ -36,13 +36,13 @@ export function SignUp() {
             dispatch(login({ userData: logInResponse.data.user }));
             navigate("/");
           } else {
-            setError(logInResponse.message);
+            setError(logInResponse.response.data);
           }
         } else {
-          setError(response.message);
+          setError(logInResponse.response.data);
         }
       } catch (error) {
-        setError(error);
+        setError(error.response.data);
       } finally {
         setIsLoading(false);
       }
@@ -61,12 +61,12 @@ export function SignUp() {
   useEffect(() => {
     const input = watch((value, { name }) => {
       if (name == "fullName") {
-        setValue("userName", slugTransformation(value), {
+        setValue("userName", slugTransformation(value.fullName), {
           shouldValidate: true,
         });
       }
     });
-    return input.unsubscribe();
+    return () => input.unsubscribe();
   }, [slugTransformation, watch, setValue]);
   return (
     <Container className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8">
@@ -124,7 +124,7 @@ export function SignUp() {
                   matchPattern: (value) =>
                     /^(?=.{1,254}$)(?=.{1,64}@)(?![.])(?!.*\.\.)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+(?<![.])@(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$/.test(
                       value
-                    ) || "Invalid email address",
+                    ) || setError("Invalid email address"),
                 },
               })}
             />
@@ -139,7 +139,7 @@ export function SignUp() {
                 validate: {
                   matchPattern: (value) =>
                     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value) ||
-                    "Password must contain at least 8 characters, including at least one letter and one number",
+                    setError("Password must contain at least 8 characters, including at least one letter and one number"),
                 },
               })}
             />
@@ -166,7 +166,7 @@ export function SignUp() {
                   <div className="absolute inset-0 border-2 border-transparent border-t-cyan-400 border-r-purple-400 rounded-full animate-spin"></div>
                 </div>
               )}
-              <span className="absolute left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300 pointer-events-none"></span>
               {isLoading ? "Creating account..." : "Sign Up"}
             </span>
           </Button>
