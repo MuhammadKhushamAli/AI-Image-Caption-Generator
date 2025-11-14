@@ -5,8 +5,14 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "./app/store.js";
-import { Login } from "./components/index.js";
-
+import { AuthLayout } from "./components";
+import {
+  ChatPage,
+  HistoryPage,
+  HomePage,
+  LoginPage,
+  SignUpPage,
+} from "./pages";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,51 +21,34 @@ const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <>
-          </>
-          // <IsAuth>
-          //   <Home />
-          // </IsAuth>
+          <AuthLayout isAuthReuired={false}>
+            <HomePage />
+          </AuthLayout>
         ),
       },
       {
         path: "/signup",
         element: (
-          <>
-          </>
-          // <IsAuth>
-          //   <SignUp />
-          // </IsAuth>
+          <AuthLayout isAuthReuired={false}>
+            <SignUpPage />
+          </AuthLayout>
         ),
       },
       {
         path: "/login",
         element: (
-          <Login />
-          // <IsAuth>
-          //   <Login />
-          // </IsAuth>
+          <AuthLayout isAuthReuired={false}>
+            <LoginPage />
+          </AuthLayout>
         ),
       },
       {
         path: "/history",
-        element: (
-          <>
-          </>
-          // <IsAuth>
-          //   <History />
-          // </IsAuth>
-        ),
+        element: <HistoryPage />,
       },
       {
         path: "/chat:chatID",
-        element: (
-          <>
-          </>
-          // <IsAuth>
-          //   <Chat />
-          // </IsAuth>
-        ),
+        element: <ChatPage />,
       },
     ],
   },
@@ -68,7 +57,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </Provider>
   </StrictMode>
 );
