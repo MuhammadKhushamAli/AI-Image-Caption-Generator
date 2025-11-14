@@ -3,7 +3,7 @@ import { Container, Header } from "./components";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { axiosInstance } from "./axios/axios.js";
-import { login } from "./features/authentication/authSlice.js;
+import { login } from "./features/authentication/authSlice.js";
 import { Error } from "./components/Error.jsx";
 
 function App() {
