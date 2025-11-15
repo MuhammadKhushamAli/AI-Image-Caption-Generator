@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../utils/sendEmail.js";
 
 const generateAccessAndRefreshToken = async (user) => {
   try {
@@ -152,23 +153,28 @@ export const logout = asyncHandler(async (req, res) => {
 });
 
 export const changePassword = asyncHandler(async (req, res) => {
-  const { oldPassword, newPassword } = req?.body;
-
-  if (!(oldPassword && newPassword))
-    throw new ApiError(400, "All Fields Are Required");
+  const { newPassword } = req?.body;
 
   const user = await User.findById(req?.user?._id);
   if (!user) throw new ApiError(500, "Error in Fetching User Details");
 
-  if (!(await user.isPasswordValid(oldPassword)))
-    throw new ApiError(401, "Invalid Old Password");
+  if (!newPassword) throw new ApiError(400, "All Fields Are Required");
 
-  if (oldPassword === newPassword)
-    throw new ApiError(409, "Same New Password as Old Password");
+  if (!(await user.isPasswordValid(newPassword)))
+    throw new ApiError(401, "Same as Old Password");
+
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
 
   res.status(200).json(new ApiResponse(200, "Password Successfully Changed"));
+});
+
+export const otpGetter = asyncHandler(async (req, res) => {
+  const otp = Math.floor(1000 + Math.random() * 9999);
+  const email = await sendEmail("Forgot Password", otp, req?.user?.email);
+  if (email) throw new ApiError(500, "Unable to Send Email");
+
+  res.status(200).json(new ApiResponse(200, "Email Successfully Sent"));
 });
 
 export const getUserHistory = asyncHandler(async (req, res) => {
