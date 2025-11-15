@@ -7,10 +7,13 @@ import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 import { AuthLayout } from "./components";
 import {
+  ChangePasswordPage,
   ChatPage,
+  EmailPage,
   HistoryPage,
   HomePage,
   LoginPage,
+  OTPPage,
   SignUpPage,
 } from "./pages";
 const router = createBrowserRouter([
@@ -44,11 +47,43 @@ const router = createBrowserRouter([
       },
       {
         path: "/history",
-        element: <HistoryPage />,
+        element: (
+          <AuthLayout isAuthReuired={true}>
+            <HistoryPage />
+          </AuthLayout>
+        ),
       },
       {
         path: "/chat:chatId",
-        element: <ChatPage />,
+        element: (
+          <AuthLayout isAuthReuired={true}>
+            <ChatPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/forget-password",
+        element: (
+          <AuthLayout isAuthReuired={false}>
+            <EmailPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/otp-verify",
+        element: (
+          <AuthLayout isAuthReuired={false}>
+            <OTPPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/change-password",
+        element: (
+          <AuthLayout isAuthReuired={false}>
+            <ChangePasswordPage />
+          </AuthLayout>
+        ),
       },
     ],
   },
