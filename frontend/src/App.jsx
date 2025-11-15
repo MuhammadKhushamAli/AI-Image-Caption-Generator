@@ -21,10 +21,10 @@ function App() {
           "/api/v1/users/current-user"
         );
         if (currentUserResponse.status === 200) {
-          dispatch(login({ userData: currentUserResponse?.data?.data }));
+          dispatch(login({ userData: currentUserResponse?.data }));
         }
       } catch (error) {
-        setError(error?.response?.data?.message);
+        setError(error?.response?.message);
       } finally {
         setIsLoading(false);
       }

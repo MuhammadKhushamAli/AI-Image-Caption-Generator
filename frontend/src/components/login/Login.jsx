@@ -28,10 +28,10 @@ export function Login() {
           dispatch(login({ userData: response.data.user }));
           navigate("/");
         } else {
-          setError(response.response.message);
+          setError(response.message);
         }
       } catch (error) {
-        setError(error.response.message);
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }
