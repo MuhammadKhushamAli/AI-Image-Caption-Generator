@@ -34,7 +34,7 @@ export function Error({ error }) {
             
             {/* Error message */}
             <div className="flex-1">
-              <h3 className="text-red-300 font-semibold mb-1">Error</h3>
+              <h3 className="text-red-300 font-semibold mb-1">Alert</h3>
               <p className="text-red-200 text-sm">{typeof error === 'string' ? error : error?.message || 'An error occurred'}</p>
             </div>
             
