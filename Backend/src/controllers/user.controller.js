@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/sendEmail.js";
+import { setOTP, verifyOTP } from "../utils/otpServices.js";
 
 const generateAccessAndRefreshToken = async (user) => {
   try {
@@ -153,12 +154,11 @@ export const logout = asyncHandler(async (req, res) => {
 });
 
 export const changePassword = asyncHandler(async (req, res) => {
-  const { newPassword } = req?.body;
-
-  const user = await User.findById(req?.user?._id);
-  if (!user) throw new ApiError(500, "Error in Fetching User Details");
-
+  const { email, newPassword } = req?.body;
   if (!newPassword) throw new ApiError(400, "All Fields Are Required");
+
+  const user = await User.findOne({ email });
+  if (!user) throw new ApiError(500, "Error in Fetching User Details");
 
   if (!(await user.isPasswordValid(newPassword)))
     throw new ApiError(401, "Same as Old Password");
@@ -170,11 +170,35 @@ export const changePassword = asyncHandler(async (req, res) => {
 });
 
 export const otpGetter = asyncHandler(async (req, res) => {
+  let { email } = req?.body;
+  email = email?.trim();
+  if (!email) throw new ApiError(400, "Email Must be Required");
+
+  const user = await User.findOne({ email });
+  if (!user) throw new ApiError(404, "User not Found");
+
   const otp = Math.floor(1000 + Math.random() * 9999);
-  const email = await sendEmail("Forgot Password", otp, req?.user?.email);
-  if (!email) throw new ApiError(500, "Unable to Send Email");
+
+  const otpSet = await setOTP(email, otp);
+  if (!otpSet) throw new ApiError(500, "Unable to Set OTP");
+
+  const emailSent = await sendEmail("Forgot Password", otp, email);
+  if (!emailSent) throw new ApiError(500, "Unable to Send Email");
 
   res.status(200).json(new ApiResponse(200, "Email Successfully Sent"));
+});
+
+export const otpVerify = asyncHandler(async (req, res) => {
+  let { email, otp } = req?.body;
+  email = email?.trim();
+  otp = String(otp);
+  otp = otp?.trim();
+  if (!(otp && email)) throw ApiError(400, "All Fields are Reuired");
+
+  const otpVerify = await verifyOTP(email, otp);
+  if (!otpVerify) throw new ApiError(404, "OTP is not Matched");
+
+  res.status(200).json(new ApiResponse(200, "OTP Successully Verified"));
 });
 
 export const getUserHistory = asyncHandler(async (req, res) => {
