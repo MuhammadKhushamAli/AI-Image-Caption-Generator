@@ -1,6 +1,11 @@
 import nodemailer from "nodemailer";
 import fs from "fs";
-import { ApiError } from "./ApiError.js";
+import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: "./.env",
+});
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -11,9 +16,13 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmail = async (subject, otp, to) => {
-  let html = fs.readFileSync(path.join(process.cwd(), "email.html"), "utf8");
-
+  let html = fs.readFileSync(
+    path.join(process.cwd(), "src", "utils", "email.html"),
+    "utf8"
+  );
+  
   html = html.replace("{{OTP_CODE}}", otp);
+
   try {
     return await transporter.sendMail({
       from: process.env.EMAIL,

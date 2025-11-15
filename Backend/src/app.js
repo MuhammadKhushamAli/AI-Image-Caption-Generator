@@ -1,3 +1,4 @@
+import { ApiError } from "./utils/ApiError.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -35,5 +36,11 @@ import chatRouter from "./routes/chat.route.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chat", chatRouter);
+
+app.use((err, req, res, next) => {
+  res
+    .status(err.statusCode || 500)
+    .json(new ApiError(err.statusCode, err.message, err.errors, err.stack));
+});
 
 export default app;

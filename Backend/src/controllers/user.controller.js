@@ -172,7 +172,7 @@ export const changePassword = asyncHandler(async (req, res) => {
 export const otpGetter = asyncHandler(async (req, res) => {
   const otp = Math.floor(1000 + Math.random() * 9999);
   const email = await sendEmail("Forgot Password", otp, req?.user?.email);
-  if (email) throw new ApiError(500, "Unable to Send Email");
+  if (!email) throw new ApiError(500, "Unable to Send Email");
 
   res.status(200).json(new ApiResponse(200, "Email Successfully Sent"));
 });
