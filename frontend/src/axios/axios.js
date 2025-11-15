@@ -10,10 +10,10 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-  res => ({
+  (res) => ({
     data: res?.data?.data,
-    message: res?.data?.message,
-    status: res?.status
+    message: res?.data?.message || "Succeed",
+    status: res?.status,
   }),
   async (error) => {
     const orignalRequest = error.config;
@@ -26,15 +26,15 @@ axiosInstance.interceptors.response.use(
         window.location.href = "/login";
         return Promise.reject({
           status: error?.status,
-          message: error?.response?.data?.message,
-          data: []
+          message: error?.response?.data?.message || "Something Went Wrong",
+          data: [],
         });
       }
     }
     return Promise.reject({
       status: error?.status,
-      message: error?.response?.data?.message,
-      data: []
+      message: error?.response?.data?.message || "Something Went Wrong",
+      data: [],
     });
   }
 );
