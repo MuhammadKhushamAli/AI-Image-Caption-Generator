@@ -10,7 +10,11 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-  (res) => res,
+  res => ({
+    data: res?.data?.data,
+    message: res?.data?.message,
+    status: res?.status
+  }),
   async (error) => {
     const orignalRequest = error.config;
     if (error.response?.status === 401 && !orignalRequest._retry) {
@@ -20,9 +24,17 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(orignalRequest);
       } catch (error) {
         window.location.href = "/login";
-        return Promise.reject(error);
+        return Promise.reject({
+          status: error?.status,
+          message: error?.response?.data?.message,
+          data: []
+        });
       }
     }
-    return Promise.reject(error);
+    return Promise.reject({
+      status: error?.status,
+      message: error?.response?.data?.message,
+      data: []
+    });
   }
 );
