@@ -70,7 +70,7 @@ export const login = asyncHandler(async (req, res) => {
   if (!user) throw new ApiError(404, "User not Found");
 
   if (!(await user.isPasswordValid(password)))
-    throw new ApiError(401, "Incorrect Password");
+    throw new ApiError(400, "Incorrect Password");
 
   const { refreshToken, accessToken } =
     await generateAccessAndRefreshToken(user);
@@ -160,8 +160,8 @@ export const changePassword = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) throw new ApiError(500, "Error in Fetching User Details");
 
-  if (!(await user.isPasswordValid(newPassword)))
-    throw new ApiError(401, "Same as Old Password");
+  if (await user.isPasswordValid(newPassword))
+    throw new ApiError(400, "Same as Old Password");
 
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
