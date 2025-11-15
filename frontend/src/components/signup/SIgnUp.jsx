@@ -25,7 +25,7 @@ export function SignUp() {
           data
         );
         if (response.status === 200) {
-          setError(response.data.message);
+          setError(response.message);
           const logInResponse = await axiosInstance.post(
             "/api/v1/users/login",
             {
@@ -34,16 +34,16 @@ export function SignUp() {
             }
           );
           if (logInResponse.status === 200) {
-            dispatch(login({ userData: logInResponse.data.data.user }));
+            dispatch(login({ userData: logInResponse.data.user }));
             navigate("/");
           } else {
-            setError(logInResponse.response.data.message);
+            setError(logInResponse.response.message);
           }
         } else {
-          setError(logInResponse.response.data.message);
+          setError(logInResponse.message);
         }
       } catch (error) {
-        setError(error.response.data.message);
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }

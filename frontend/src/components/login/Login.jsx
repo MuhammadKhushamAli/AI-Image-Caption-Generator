@@ -23,14 +23,14 @@ export function Login() {
         const response = await axiosInstance.post("/api/v1/users/login", data);
 
         if (response.status == 200) {
-          setError(response.data.message)
+          setError(response.message)
           dispatch(login({ userData: response.data.user }));
           navigate("/");
         } else {
-          setError(response.response.data.message);
+          setError(response.response.message);
         }
       } catch (error) {
-        setError(error.response.data.message);
+        setError(error.response.message);
       } finally {
         setIsLoading(false);
       }
