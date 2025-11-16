@@ -5,8 +5,7 @@ import { useDispatch } from "react-redux";
 import { axiosInstance } from "./axios/axios.js";
 import { login } from "./features/authentication/authSlice.js";
 import { Error } from "./components/Error.jsx";
-import { Loading } from "./components/Loading.jsx";
-
+import { MainLoading } from "./components/MainLoading.jsx";
 function App() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +32,7 @@ function App() {
     fetchCurrentUser();
   }, [dispatch]);
   return isLoading ? (
-    <Loading />
+    <MainLoading />
   ) : (
     <Container>
       {error && <Error error={error} />}
