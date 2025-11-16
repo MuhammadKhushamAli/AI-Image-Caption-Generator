@@ -6,6 +6,7 @@ import Webcam from "react-webcam";
 import { axiosInstance } from "../../axios/axios.js";
 import { useNavigate } from "react-router";
 import { Loading } from "../Loading.jsx";
+import { useSelector } from "react-redux";
 
 export function Home() {
   const [preview, setPreview] = useState(null);
@@ -16,6 +17,7 @@ export function Home() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const loginStatus = useSelector(state => state?.auth?.loginStatus);
 
   const onDrop = useCallback((file) => {
     const image = file[0];
@@ -36,13 +38,13 @@ export function Home() {
 
     try {
       const response = await axiosInstance.post(
-        "/api/v1/chat/add-chat",
+        loginStatus ? "/api/v1/chat/add-chat" : "/api/v1/chat/add-chat-guest",
         formData
-      );
+      )
       console.log(response);
       if (response.status == 200) {
         setError(response.message);
-        navigate(`/chat:${response?.data?._id}`);
+        navigate(`/chat/${response?.data?._id}`);
       } else {
         setError(response.message);
       }

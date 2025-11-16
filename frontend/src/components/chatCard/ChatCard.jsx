@@ -1,45 +1,40 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios.js";
 import { Container } from "../container/Container.jsx";
 import { Error } from "../Error.jsx";
-import { Loading } from "../Loading.jsx";
+import { useSelector } from "react-redux";
 
 export function ChatCard() {
-  const isLoggedIn = useSelector((state) => state.auth.loginStatus);
-  const navigate = useNavigate();
   const [error, setError] = useState("");
   const { chatId } = useParams();
   const [chat, setChat] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const isLogin = useSelector(state => state?.auth?.loginStatus);
 
   useEffect(() => {
     const fetchChat = async () => {
       setError("");
       setIsLoading(true);
-      if (isLoggedIn) {
         try {
           const chatResponse = await axiosInstance.get(
-            `/api/v1/chat/view-chat${chatId}`
+            isLogin ? `/api/v1/chat/view-chat/${chatId}` : `/api/v1/chat/view-chat-guest/${chatId}`
           );
           if (chatResponse?.status === 200) {
-            setChat(chatResponse?.data?.data);
+            console.log(chatResponse);
+            setChat(chatResponse?.data);
           } else {
-            setError(chatResponse?.response?.data?.message);
+            setError(chatResponse?.message);
           }
         } catch (err) {
-          setError(err?.response?.data?.message|| "Failed to load chat");
+          setError(err?.message|| "Failed to load chat");
         } finally {
           setIsLoading(false);
         }
-      } else {
-        navigate("/login");
-      }
     };
 
     fetchChat();
-  }, [chatId, isLoggedIn, navigate]);
+  }, [chatId]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -53,9 +48,7 @@ export function ChatCard() {
     });
   };
 
-  return isLoading ? (
-    <Loading />
-  ) : (
+  return(
     <Container className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       {error && <Error error={error} />}
 
@@ -209,6 +202,5 @@ export function ChatCard() {
           )}
         </div>
       </div>
-    </Container>
-  );
+    </Container>);
 }
