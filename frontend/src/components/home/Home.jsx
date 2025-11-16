@@ -297,7 +297,7 @@ export function Home() {
                       {isDropActive ? "Drop Image Now" : "Drag & Drop or Click"}
                     </h3>
                     <p className="text-slate-400 text-sm mb-10 tracking-wide">
-                      Supports JPG, PNG, GIF • Max 10MB
+                      Supports JPG, PNG, JPEG • Max 10MB
                     </p>
 
                     <Button
