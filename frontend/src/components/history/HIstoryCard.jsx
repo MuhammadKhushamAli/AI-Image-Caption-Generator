@@ -3,18 +3,19 @@ import { axiosInstance } from "../../axios/axios.js";
 import { useState, useCallback } from "react";
 import { Error } from "../Error.jsx";
 
-export function HistoryCard({ imageURL, caption, id }) {
+export function HistoryCard({ imageURL, caption, id, onDelete}) {
   const [error, setError] = useState("");
 
-  const onDelete = useCallback(
+  const onDeleteCard = useCallback(
     async (e) => {
+      e.preventDefault();
       e.stopPropagation();
       try {
         const response = await axiosInstance.delete(
           `/api/v1/chat/delete-chat/${id}`
         );
         if (response?.status === 200) {
-          setError(response?.message);
+          onDelete(id);
         }
       } catch (error) {
         setError(error?.message);
@@ -86,7 +87,7 @@ export function HistoryCard({ imageURL, caption, id }) {
           {/* Delete Button (now z-10) */}
           <button
             type="button"
-            onClick={onDelete}
+            onClick={onDeleteCard}
             className="absolute top-4 right-4 z-10 p-1.5 rounded-lg 
                    bg-slate-800/60 backdrop-blur-sm border border-white/10
                    text-slate-400 hover:text-red-400 hover:border-red-400/50

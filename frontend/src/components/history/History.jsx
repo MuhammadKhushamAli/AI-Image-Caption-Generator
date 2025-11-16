@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../axios/axios.js";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -70,6 +70,10 @@ export function History() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleDelete = useCallback((id) => {
+    setUserHistory((prev) => prev.filter((chat) => chat._id !== id));
+  })
+
   return (
     <Container className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {error && <Error error={error} />}
@@ -99,6 +103,7 @@ export function History() {
                 imageURL={chat.image}
                 id={chat._id}
                 caption={chat.caption}
+                onDelete={handleDelete}
               />
             ))}
           </div>
