@@ -12,8 +12,6 @@ import fs from "fs";
 import fetch from "node-fetch";
 
 export const addChat = asyncHandler(async (req, res) => {
-    console.log(req.file);
-
   const image = req?.file?.path;
   if (!image) throw new ApiError(400, "Image Must be Required");
 
@@ -39,7 +37,7 @@ export const addChat = asyncHandler(async (req, res) => {
     owner: req?.user?._id || null,
   });
   if (!chat) throw new ApiError(500, "Unable to Create Chat");
-  if (req?.user) {
+  if (req?.user?._id) {
     const user = await User.findByIdAndUpdate(
       req?.user?._id,
       {
@@ -63,7 +61,7 @@ export const viewChat = asyncHandler(async (req, res) => {
 
   const chat = await Chat.findOne({
     _id: chatID,
-    owner: req?.user?._id,
+    owner: req?.user?._id || null,
   }).select("-owner");
   if (!chat) throw new ApiError(404, "Chat Not Found");
 
