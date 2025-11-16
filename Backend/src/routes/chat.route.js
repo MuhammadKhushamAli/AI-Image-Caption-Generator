@@ -9,7 +9,7 @@ import { uploader } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
-router.route("/add-chat").post(verifyTokens,
+router.route("/add-chat").post(
     uploader.single("image")
     ,addChat);
 router.route("/delete-chat/:chatID").delete(verifyTokens, deleteChat);

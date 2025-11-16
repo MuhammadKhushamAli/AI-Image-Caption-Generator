@@ -18,12 +18,13 @@ export const addChat = asyncHandler(async (req, res) => {
   const form = new FormData();
   form.append("image", fs.createReadStream(image));
   let caption = await fetch("http://127.0.0.1:5000/caption", {
-      method: "POST",
-      body: form,
-    });
-    caption = await caption.json();
+    method: "POST",
+    body: form,
+  });
+  caption = await caption.json();
 
-  if (caption.status != 200) throw new ApiError(400, "Caption Must be Required");
+  if (caption.status != 200)
+    throw new ApiError(400, "Caption Must be Required");
 
   const cloudImage = await uploadToCloudinary(image);
   if (!cloudImage)
@@ -33,20 +34,21 @@ export const addChat = asyncHandler(async (req, res) => {
     name: req?.file?.filename,
     caption: caption?.caption,
     image: cloudImage?.url,
-    owner: req?.user?._id,
+    owner: req?.user?._id || null,
   });
   if (!chat) throw new ApiError(500, "Unable to Create Chat");
-
-  const user = await User.findByIdAndUpdate(
-    req?.user?._id,
-    {
-      $addToSet: { history: chat?._id },
-    },
-    {
-      new: true,
-    }
-  );
-  if (!user) throw new ApiError(500, "Unable to Update User History");
+  if (req?.user) {
+    const user = await User.findByIdAndUpdate(
+      req?.user?._id,
+      {
+        $addToSet: { history: chat?._id },
+      },
+      {
+        new: true,
+      }
+    );
+    if (!user) throw new ApiError(500, "Unable to Update User History");
+  }
 
   res.status(200).json(new ApiResponse(200, "Chat is Created", chat));
 });
