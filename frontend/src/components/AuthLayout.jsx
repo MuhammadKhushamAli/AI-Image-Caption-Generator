@@ -29,12 +29,11 @@ export function AuthLayout({ children, isAuthReuired = false }) {
         }
       }
       setIsLoading(false);
+      if (isAuthReuired && !(isLoggedIn || isUserFetched.current)) {
+        navigate("/login");
+      }
     };
     logger();
   }, [isAuthReuired, isLoggedIn, navigate]);
-
-  if (isAuthReuired && !(isLoggedIn || isUserFetched.current)) {
-    navigate("/login");
-  }
   return isLoading ? <MainLoading /> : <>{children}</>;
 }

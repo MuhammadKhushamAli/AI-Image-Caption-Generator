@@ -14,9 +14,11 @@ export function History() {
   const isNextPage = useRef(false);
   const isLoggedIn = useSelector((state) => state?.auth?.loginStatus);
   const userData = useSelector((state) => state?.auth?.userData);
+  const userName = userData?.userName;
   const navigate = useNavigate();
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchHistory = async () => {
       setIsLoading(true);
       setError("");
@@ -25,7 +27,8 @@ export function History() {
           const historyResponse = await axiosInstance.get(
             "/api/v1/users/user-history",
             {
-              params: { userName: userData?.userName, page: currentPage },
+              params: { userName: userName, page: currentPage },
+              signal: controller.signal,
             }
           );
           if (historyResponse?.status === 200) {
@@ -33,12 +36,14 @@ export function History() {
             setUserHistory((prev) => [...prev, ...newHistory]);
             isNextPage.current = historyResponse?.data?.hasNextPage;
           } else {
-            setError(historyResponse?.response?.message);
+            setError(historyResponse?.message);
           }
         } else {
           navigate("/login");
         }
       } catch (error) {
+        if(error.name === "CanceledError") return;
+        console.log(error);
         setError(error);
       } finally {
         setIsLoading(false);
@@ -46,7 +51,8 @@ export function History() {
     };
 
     fetchHistory();
-  }, [currentPage, isLoggedIn, userData?.userName, navigate]);
+    return () => controller.abort();
+  }, [currentPage, isLoggedIn, userName]);
 
   useEffect(() => {
     const handleScroll = () => {

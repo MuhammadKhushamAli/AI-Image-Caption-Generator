@@ -3,7 +3,7 @@ import axios from "axios";
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:4000",
   withCredentials: true,
-  timeout: 10000,
+  timeout: 50000,
 });
 
 axiosInstance.interceptors.response.use(
@@ -27,6 +27,8 @@ axiosInstance.interceptors.response.use(
           data: [],
         });
       }
+    } else if (error.name === "CanceledError") {
+      return Promise.reject(error);
     }
     return Promise.reject({
       status: error?.status,

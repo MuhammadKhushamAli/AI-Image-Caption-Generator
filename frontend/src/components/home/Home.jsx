@@ -17,7 +17,6 @@ export function Home() {
   const [isCaptured, setIsCaptured] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [isMainLoading, setMainLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const loginStatus = useSelector((state) => state?.auth?.loginStatus);
 
@@ -43,7 +42,6 @@ export function Home() {
         loginStatus ? "/api/v1/chat/add-chat" : "/api/v1/chat/add-chat-guest",
         formData
       );
-      console.log(response);
       if (response.status == 200) {
         setError(response.message);
         navigate(`/chat/${response?.data?._id}`);
@@ -81,8 +79,6 @@ export function Home() {
     accept: { "image/*": [] },
     multiple: false,
   });
-
-  useEffect(() => setMainLoading(false), []);
   return (
     <Container className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
