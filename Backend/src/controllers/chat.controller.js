@@ -18,7 +18,7 @@ export const addChat = asyncHandler(async (req, res) => {
 
   const form = new FormData();
   form.append("image", fs.createReadStream(image));
-  let caption = await fetch("http://127.0.0.1:5000/caption", {
+  let caption = await fetch(process.env.MODEL_API, {
     method: "POST",
     body: form,
   });
