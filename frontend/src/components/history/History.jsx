@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Container } from "../container/Container.jsx";
 import { HistoryCard } from "./HIstoryCard.jsx";
-import { Link } from "react-router-dom";
 import { Error } from "../Error.jsx";
 
 export function History() {
@@ -22,6 +21,7 @@ export function History() {
       setIsLoading(true);
       setError("");
       try {
+        console.log(isLoggedIn);
         if (isLoggedIn) {
           const historyResponse = await axiosInstance.get(
             "/api/v1/users/user-history",
