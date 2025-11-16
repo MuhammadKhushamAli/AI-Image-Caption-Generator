@@ -5,6 +5,7 @@ import { Container } from "../container/Container.jsx";
 import { Error } from "../Error.jsx";
 import { useSelector } from "react-redux";
 import { MainLoading } from "../MainLoading.jsx";
+import { Link } from "react-router-dom";
 
 export function ChatCard() {
   const [error, setError] = useState("");
@@ -59,6 +60,34 @@ export function ChatCard() {
       ) : (
         <>
           <div className="max-w-4xl mx-auto">
+            {/* --- ADDED GO BACK BUTTON --- */}
+            <div className="mb-6 relative z-10">
+              <Link
+                to="/history"
+                className="relative inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 group
+                       text-slate-300 hover:text-cyan-300 border border-white/10 hover:border-cyan-500/30 
+                       bg-slate-900/70 backdrop-blur-sm hover:bg-slate-800/50
+                       shadow-lg shadow-cyan-900/5 ring-1 ring-white/5 active:scale-95"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 19l-7-7 7-7"
+                  ></path>
+                </svg>
+                Go Back
+              </Link>
+            </div>
+            {/* --- END GO BACK BUTTON --- */}
+
             {/* Header */}
             <div className="text-center mb-8 sm:mb-12">
               <div className="relative inline-block mb-4">
