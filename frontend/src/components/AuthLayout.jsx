@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { axiosInstance } from "../axios/axios.js";
 import { login } from "../features/authentication/authSlice.js";
+import { MainLoading } from "./MainLoading.jsx";
 
 export function AuthLayout({ children, isAuthReuired = false }) {
   const navigate = useNavigate();
@@ -35,5 +36,5 @@ export function AuthLayout({ children, isAuthReuired = false }) {
   if (isAuthReuired && !(isLoggedIn || isUserFetched.current)) {
     navigate("/login");
   }
-  return isLoading ? <h1>Loading</h1> : <>{children}</>;
+  return isLoading ? <MainLoading /> : <>{children}</>;
 }

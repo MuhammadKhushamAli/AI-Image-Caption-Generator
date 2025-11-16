@@ -21,7 +21,6 @@ export function History() {
       setIsLoading(true);
       setError("");
       try {
-        console.log(isLoggedIn);
         if (isLoggedIn) {
           const historyResponse = await axiosInstance.get(
             "/api/v1/users/user-history",
@@ -30,7 +29,6 @@ export function History() {
             }
           );
           if (historyResponse?.status === 200) {
-            setError(historyResponse?.message);
             const newHistory = historyResponse?.data?.docs?.[0]?.history || [];
             setUserHistory((prev) => [...prev, ...newHistory]);
             isNextPage.current = historyResponse?.data?.hasNextPage;
@@ -68,10 +66,9 @@ export function History() {
 
   return (
     <Container className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {error && <Error error={error} />}
       {/* Ambient Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-linear-to-tr from-cyan-900/30 via-purple-900/20 to-slate-900/30 blur-[140px] rounded-full pointer-events-none opacity-30"></div>
-
-      {error && <Error error={error} />}
 
       {/* Header Section */}
       <div className="text-center mb-12 sm:mb-16 relative z-10">
