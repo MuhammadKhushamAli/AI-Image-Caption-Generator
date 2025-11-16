@@ -15,7 +15,7 @@ const openRouter = new OpenRouter({
 export const LLMModel = async (message) => {
   try {
     return await openRouter.chat.send({
-      model: "openai/gpt-5.1",
+      model: process.env.OPEN_ROUTER_MODEL,
       messages: [
         {
           role: "user",
@@ -25,6 +25,7 @@ export const LLMModel = async (message) => {
       stream: false,
     });
   } catch (error) {
+    console.log("Error in LLM Model:", error);
     return null;
   }
 };

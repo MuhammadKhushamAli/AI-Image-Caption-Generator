@@ -10,6 +10,7 @@ import {
 import FormData from "form-data";
 import fs from "fs";
 import fetch from "node-fetch";
+import { LLMModel } from "../utils/openRouter.js";
 
 export const addChat = asyncHandler(async (req, res) => {
   const image = req?.file?.path;
@@ -25,6 +26,8 @@ export const addChat = asyncHandler(async (req, res) => {
 
   if (caption.status != 200)
     throw new ApiError(400, "Caption Must be Required");
+  const LLMResponse = await LLMModel(`Rephrase and Emphasize this: ${caption?.caption}`);
+  if(!LLMResponse) throw new ApiError(500, "Unable to Generate Enhanced Caption");
 
   const cloudImage = await uploadToCloudinary(image);
   if (!cloudImage)
@@ -32,7 +35,7 @@ export const addChat = asyncHandler(async (req, res) => {
 
   const chat = await Chat.create({
     name: req?.file?.filename,
-    caption: caption?.caption,
+    caption: LLMResponse?.choices[0]?.message?.content.replaceAll("*", "") || caption?.caption,
     image: cloudImage?.url,
     owner: req?.user?._id || null,
   });
@@ -49,7 +52,7 @@ export const addChat = asyncHandler(async (req, res) => {
     );
     if (!user) throw new ApiError(500, "Unable to Update User History");
   }
-
+  console.log("Chat Created:", chat);
   res.status(200).json(new ApiResponse(200, "Chat is Created", chat));
 });
 
