@@ -12,6 +12,8 @@ import fs from "fs";
 import fetch from "node-fetch";
 
 export const addChat = asyncHandler(async (req, res) => {
+    console.log(req.file);
+
   const image = req?.file?.path;
   if (!image) throw new ApiError(400, "Image Must be Required");
 
