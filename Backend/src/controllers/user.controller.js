@@ -84,6 +84,7 @@ export const login = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "None",
+    domain: process.env.COOKIE_DOMAIN,
   };
 
   return res
@@ -124,6 +125,7 @@ export const refreshTokens = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "None",
+    domain: process.env.COOKIE_DOMAIN,
   };
   res
     .status(200)
@@ -146,6 +148,7 @@ export const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "None",
+    domain: process.env.COOKIE_DOMAIN,
   };
   res
     .status(200)
