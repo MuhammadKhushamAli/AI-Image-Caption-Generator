@@ -52,7 +52,6 @@ export const addChat = asyncHandler(async (req, res) => {
     );
     if (!user) throw new ApiError(500, "Unable to Update User History");
   }
-  console.log("Chat Created:", chat);
   res.status(200).json(new ApiResponse(200, "Chat is Created", chat));
 });
 
