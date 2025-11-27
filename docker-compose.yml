@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  frontend:
+    image: khushamali/ai-caption-genrator-frontend:v1
+    build: ./frontend
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - ai-caption-network
+  backend:
+    image: khushamali/ai-caption-backend:v2
+    build: ./Backend
+    env_file:
+      - ./Backend/.env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - model
+    restart: unless-stopped
+    networks:
+      - ai-caption-network
+  model:
+    image: khushamali/ai-caption-model:v3
+    build: ./Caption-Generator-Model
+    env_file:
+      - ./Caption-Generator-Model/.env
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    networks:
+      - ai-caption-network
+networks:
+  ai-caption-network:
+    driver: bridge
