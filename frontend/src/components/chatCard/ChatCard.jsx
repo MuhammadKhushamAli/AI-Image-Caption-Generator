@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios.js";
 import { Container } from "../container/Container.jsx";
 import { Error } from "../Error.jsx";
@@ -13,6 +13,7 @@ export function ChatCard() {
   const [chat, setChat] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const isLogin = useSelector((state) => state?.auth?.loginStatus);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchChat = async () => {
@@ -63,7 +64,11 @@ export function ChatCard() {
             {/* --- ADDED GO BACK BUTTON --- */}
             <div className="mb-6 relative z-10">
               <Link
-                to={isLogin ? "/history" : "/"}
+                to="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(-1);
+                }}
                 className="relative inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 group
                        text-slate-300 hover:text-cyan-300 border border-white/10 hover:border-cyan-500/30 
                        bg-slate-900/70 backdrop-blur-sm hover:bg-slate-800/50
