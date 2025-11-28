@@ -15,8 +15,11 @@ export function Header() {
 
   const handleLogout = async () => {
     const response = await axiosInstance.get("/api/v1/users/logout");
-    setError(response.message);
-    dispatch(logout());
+    if (response?.status != 200) {
+      setError(response.message);
+    } else {
+      dispatch(logout());
+    }
     setIsMobileMenuOpen(false);
   };
 
@@ -174,7 +177,7 @@ export function Header() {
         {/* Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-size-[40px_40px] pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-8 p-8">
+        <div className="relative z-10 flex flex-col items-center h-full space-y-4 px-8 pt-32 pb-8 overflow-y-auto">
           <div className="w-full max-w-xs space-y-4">
             {navElements.map(
               (element) =>
@@ -184,7 +187,7 @@ export function Header() {
                     to={element.path}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={({ isActive }) =>
-                      `group flex items-center justify-between w-full p-4 border-l-2 transition-all duration-300
+                      `group flex items-center justify-between w-full p-3 border-l-2 transition-all duration-300
                         ${
                           isActive
                             ? "border-cyan-400 bg-linear-to-r from-cyan-950/50 to-transparent text-cyan-300"

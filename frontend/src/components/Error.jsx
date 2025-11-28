@@ -18,13 +18,13 @@ export function Error({ error }) {
   if (!error || !isVisible) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50 animate-slide-in font-sans">
+    <div className="fixed top-4 right-4 left-4 sm:left-auto z-50 animate-slide-in font-sans">
       <div className="relative group">
         {/* --- Background Glow --- */}
         <div className="absolute -inset-1 bg-red-500/20 blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
 
         {/* --- Error Container (System Alert Module) --- */}
-        <div className="relative backdrop-blur-xl bg-[#0a111e]/95 border border-red-500/50 p-1 shadow-[0_0_30px_rgba(220,38,38,0.15)] min-w-[320px] max-w-md overflow-hidden">
+        <div className="relative backdrop-blur-xl bg-[#0a111e]/95 border border-red-500/50 p-1 shadow-[0_0_30px_rgba(220,38,38,0.15)] w-full sm:w-auto sm:min-w-[320px] max-w-md overflow-hidden">
           {/* Robotic Corner Brackets */}
           <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-red-500 z-20"></div>
           <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-red-500 z-20"></div>

@@ -27,7 +27,6 @@ export function SignUp() {
           data
         );
         if (response.status === 200) {
-          setError(response.message);
           const logInResponse = await axiosInstance.post(
             "/api/v1/users/login",
             {
