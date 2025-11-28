@@ -1,19 +1,16 @@
-import {Router} from "express";
+import { Router } from "express";
 import {
-    changePassword,
-    getCurrentUser,
-    getUserHistory,
-    login,
-    logout,
-    otpGetter,
-    otpVerify,
-    refreshTokens,
-    registerUser
+  changePassword,
+  getCurrentUser,
+  getUserHistory,
+  login,
+  logout,
+  otpGetter,
+  otpVerify,
+  refreshTokens,
+  registerUser,
 } from "../controllers/user.controller.js";
-import {
-    verifyTokens
-} from "../middlewares/auth.middleware.js";
-
+import { verifyTokens } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 

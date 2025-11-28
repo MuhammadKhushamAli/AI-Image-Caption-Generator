@@ -33,9 +33,11 @@ app.use(cookieParser());
 // Routers
 import userRouter from "./routes/user.route.js";
 import chatRouter from "./routes/chat.route.js";
+import healthRouter from "./routes/health.route.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chat", chatRouter);
+app.use("/api/v1/health", healthRouter);
 
 app.use((err, req, res, next) => {
   res
