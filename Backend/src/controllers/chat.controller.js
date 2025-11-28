@@ -26,8 +26,11 @@ export const addChat = asyncHandler(async (req, res) => {
 
   if (caption.status != 200)
     throw new ApiError(400, "Caption Must be Required");
-  const LLMResponse = await LLMModel(`Rephrase and Emphasize this: ${caption?.caption}`);
-  if(!LLMResponse) throw new ApiError(500, "Unable to Generate Enhanced Caption");
+  const LLMResponse = await LLMModel(
+    `Rephrase and Emphasize this: ${caption?.caption}`
+  );
+  if (!LLMResponse)
+    throw new ApiError(500, "Unable to Generate Enhanced Caption");
 
   const cloudImage = await uploadToCloudinary(image);
   if (!cloudImage)
@@ -35,7 +38,9 @@ export const addChat = asyncHandler(async (req, res) => {
 
   const chat = await Chat.create({
     name: req?.file?.filename,
-    caption: LLMResponse?.choices[0]?.message?.content.replaceAll("*", "") || caption?.caption,
+    caption:
+      LLMResponse?.choices[0]?.message?.content.replaceAll("*", "") ||
+      caption?.caption,
     image: cloudImage?.url,
     owner: req?.user?._id || null,
   });
