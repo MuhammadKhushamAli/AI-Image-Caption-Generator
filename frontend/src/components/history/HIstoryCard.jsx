@@ -2,8 +2,16 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios.js";
 import { useState, useCallback } from "react";
 import { Error } from "../Error.jsx";
+import { 
+  Trash2, 
+  AlertTriangle, 
+  Image as ImageIcon, 
+  FileText, 
+  ChevronRight,
+  Maximize
+} from 'lucide-react';
 
-export function HistoryCard({ imageURL, caption, id, onDelete}) {
+export function HistoryCard({ imageURL, caption, id, onDelete }) {
   const [error, setError] = useState("");
 
   const onDeleteCard = useCallback(
@@ -24,143 +32,118 @@ export function HistoryCard({ imageURL, caption, id, onDelete}) {
     [id]
   );
   return (
-    <Link to={`/chat/${id}`} className="block group">
-      {/* The error component is no longer here.
-        It has been moved inside the card div below.
-      */}
-      <div className="relative">
-        {/* Background glow on hover */}
-        <div className="absolute -inset-1 bg-linear-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 blur-2xl rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+   <Link to={`/chat/${id}`} className="block group relative">
+      {/* --- Hover Holographic Glow --- */}
+      <div className="absolute -inset-0.5 bg-linear-to-b from-cyan-500/20 via-transparent to-cyan-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none"></div>
 
-        {/* Card container - Added 'overflow-hidden' */}
-        <div
-          className="relative backdrop-blur-xl bg-slate-900/80 border border-white/10 rounded-2xl p-4 sm:p-6 shadow-xl shadow-cyan-900/10 ring-1 ring-white/5 
-                   transition-all duration-300 
-                   group-hover:shadow-[0_0_40px_rgba(6,182,212,0.25)] group-hover:border-cyan-500/30 group-hover:scale-[1.02] 
-                   overflow-hidden" // Added overflow-hidden
-        >
-          {/* --- NEW ERROR POPUP --- */}
-          {error && (
-            <div
-              className="absolute inset-0 z-20 p-4 flex flex-col items-center justify-center 
-                          bg-slate-900/90 backdrop-blur-md text-center"
-            >
-              {/* Error Icon */}
-              <svg
-                className="w-10 h-10 text-red-400 mb-3"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
+      {/* --- Card Container (Data Module) --- */}
+      <div
+        className="relative bg-[#0a111e] border border-cyan-900/50 hover:border-cyan-500/50 rounded-xl p-1 shadow-lg transition-all duration-300 group-hover:transform group-hover:scale-[1.01] group-hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden"
+      >
+        {/* Decorative Corner Brackets */}
+        <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-cyan-900 group-hover:border-cyan-400 transition-colors z-10"></div>
+        <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-cyan-900 group-hover:border-cyan-400 transition-colors z-10"></div>
 
-              {/* Your existing Error component */}
-              <div className="text-red-300">
-                <Error error={error} />
-              </div>
-
-              {/* Close Button (This is the required logic change) */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setError(""); // Clears the error, closing the popup
-                }}
-                className="mt-4 px-4 py-1.5 text-xs font-semibold 
-                           bg-slate-700/50 border border-white/10 rounded-lg 
-                           text-slate-200 hover:bg-slate-700/80 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          )}
-          {/* --- END ERROR POPUP --- */}
-
-          {/* Delete Button (now z-10) */}
-          <button
-            type="button"
-            onClick={onDeleteCard}
-            className="absolute top-4 right-4 z-10 p-1.5 rounded-lg 
-                   bg-slate-800/60 backdrop-blur-sm border border-white/10
-                   text-slate-400 hover:text-red-400 hover:border-red-400/50
-                   opacity-50 group-hover:opacity-100 
-                   transition-all duration-300"
+        {/* --- ERROR POPUP (Overlay) --- */}
+        {error && (
+          <div
+            className="absolute inset-0 z-50 p-6 flex flex-col items-center justify-center 
+                       bg-[#050b14]/95 backdrop-blur-sm text-center border border-red-500/30"
           >
-            {/* ... (your SVG) ... */}
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m6-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              ></path>
-            </svg>
-          </button>
+            {/* Warning Icon Animation */}
+            <div className="relative mb-3">
+               <div className="absolute inset-0 bg-red-500/20 blur-xl rounded-full animate-pulse"></div>
+               <AlertTriangle className="w-10 h-10 text-red-500 relative z-10" strokeWidth={1.5} />
+            </div>
 
-          {/* Image container */}
-          <div className="relative mb-4 rounded-xl overflow-hidden border border-white/10 group-hover:border-cyan-500/40 transition-colors duration-300 shadow-lg">
-            {/* ... (your img tag) ... */}
+            <div className="text-red-400 font-mono text-sm tracking-widest uppercase mb-2">
+              System_Alert
+            </div>
+            
+            <div className="mb-4">
+              <Error error={error} />
+            </div>
+
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setError(""); 
+              }}
+              className="px-6 py-2 text-[10px] font-bold font-mono uppercase tracking-widest
+                         bg-red-950/30 border border-red-500/50 text-red-400 rounded-sm
+                         hover:bg-red-500 hover:text-white transition-all duration-300"
+            >
+              Close_Alert
+            </button>
+          </div>
+        )}
+        {/* --- END ERROR POPUP --- */}
+
+        {/* --- Delete Button (Trash Protocol) --- */}
+        <button
+          type="button"
+          onClick={onDeleteCard}
+          className="absolute top-3 right-3 z-20 p-2 rounded-sm
+                     bg-[#050b14]/80 backdrop-blur-md border border-slate-700
+                     text-slate-400 hover:text-red-400 hover:border-red-500/50 hover:bg-red-950/30
+                     opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0
+                     transition-all duration-300 ease-out"
+          title="Purge Data"
+        >
+          <Trash2 size={16} strokeWidth={1.5} />
+        </button>
+
+        {/* --- Image Section (Visual Data) --- */}
+        <div className="relative mb-1 rounded-lg overflow-hidden border border-cyan-900/30 bg-[#050b14]">
+            {/* Tech Header Strip */}
+            <div className="absolute top-0 left-0 right-0 h-6 bg-linear-to-b from-black/80 to-transparent z-10 flex items-center px-2 border-b border-white/5">
+                <ImageIcon size={10} className="text-cyan-500/70 mr-2" />
+                <span className="text-[8px] font-mono text-cyan-500/50 uppercase tracking-widest">IMG_Source_01</span>
+            </div>
+            
+            {/* Scanline Overlay */}
+            <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-size-[100%_4px] opacity-10 pointer-events-none z-10"></div>
+            
             <img
-              src={imageURL}
-              alt="Image of Caption"
-              className="w-full h-48 sm:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                src={imageURL}
+                alt="Analyzed Content"
+                className="w-full h-48 sm:h-56 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 filter grayscale-30 group-hover:grayscale-0"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-slate-900/70 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            {/* Hover Maximizer Icon */}
+            <div className="absolute bottom-2 right-2 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                <Maximize size={14} />
+            </div>
+        </div>
+
+        {/* --- Caption Section (Analysis Log) --- */}
+        <div className="relative p-3 bg-[#0c1322] border-t border-cyan-900/30">
+          <div className="flex items-start gap-3">
+             <div className="mt-1 shrink-0">
+                <FileText size={14} className="text-cyan-500/70" />
+             </div>
+             
+             <div className="min-w-0">
+                <p className="text-slate-400 text-xs sm:text-sm font-mono line-clamp-2 leading-relaxed group-hover:text-cyan-100 transition-colors duration-300">
+                  {caption}
+                </p>
+             </div>
           </div>
 
-          {/* Caption */}
-          <div className="relative">
-            {/* ... (your caption content) ... */}
-            <div className="flex items-start gap-2">
-              <svg
-                className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                />
-              </svg>
-              <p className="text-slate-300 text-sm sm:text-base line-clamp-3 group-hover:text-cyan-200 transition-colors duration-300">
-                {caption}
-              </p>
-            </div>
-            <div className="mt-4 flex items-center gap-2 text-cyan-400/0 group-hover:text-cyan-400 transition-all duration-300 ease-in-out group-hover:translate-x-1">
-              <span className="text-xs font-medium">View Details</span>
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
+          {/* Footer / View Details */}
+          <div className="mt-3 flex items-center justify-between border-t border-slate-800/50 pt-2">
+             <span className="text-[10px] text-slate-600 font-mono uppercase">ID: {id.slice(-6)}</span>
+             
+             <div className="flex items-center gap-1 text-cyan-500/0 group-hover:text-cyan-400 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+                <span className="text-[10px] font-bold font-mono uppercase tracking-wider">Access_Log</span>
+                <ChevronRight size={12} />
+             </div>
           </div>
         </div>
+
       </div>
     </Link>
   );

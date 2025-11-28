@@ -10,6 +10,8 @@ import { logout } from "../features/authentication/authSlice.js";
 import { Button } from "../components/Button.jsx";
 import { Error } from "../components/Error.jsx";
 import { setEmail } from "../features/forgetPassword/forgetSlice.js";
+import { Mail, ArrowLeft, Send, ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function EmailPage() {
   const { register, handleSubmit } = useForm();
@@ -42,96 +44,136 @@ export function EmailPage() {
   };
 
   return (
-    <Container className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {error && <Error error={error} />}
+    <Container className="min-h-screen flex flex-col items-center justify-center pt-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-linear-to-tr from-cyan-900/40 via-purple-900/30 to-slate-900/40 blur-[150px] rounded-full pointer-events-none opacity-40"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-900/10 blur-[100px] rounded-full pointer-events-none opacity-40"></div>
 
       {error && <Error error={error} />}
 
-      <div className="w-full max-w-md relative">
-        {/* Background glow effect */}
-        <div className="absolute -inset-2 bg-linear-to-r from-cyan-500/20 via-purple-500/20 to-cyan-500/20 blur-3xl rounded-3xl opacity-60"></div>
+      <div className="w-full max-w-md relative z-10">
+        {/* --- Form Container (Robotic Interface) --- */}
+        <div className="relative group perspective-1000">
+          {/* Holographic Border Effect */}
+          <div className="absolute -inset-px bg-linear-to-b from-cyan-500/20 via-transparent to-cyan-500/20 rounded-xl opacity-50 blur-sm pointer-events-none"></div>
 
-        {/* Form container - Glassy Card */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="relative backdrop-blur-2xl bg-slate-900/80 border border-white/10 rounded-2xl p-8 sm:p-10 shadow-2xl shadow-cyan-900/10 ring-1 ring-white/5 space-y-6"
-        >
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold bg-linear-to-r from-cyan-300 via-purple-400 to-cyan-300 bg-clip-text text-transparent mb-2 drop-shadow-[0_0_10px_rgba(168,85,247,0.3)]">
-              Forgot Password
-            </h1>
-            <p className="text-slate-400 text-sm tracking-wide">
-              Enter your email to receive a reset link
-            </p>
-          </div>
+          <div className="relative bg-[#0a111e]/95 border border-cyan-900/50 backdrop-blur-xl p-1 shadow-2xl">
+            {/* Interface Header Bar */}
+            <div className="flex justify-between items-center px-4 py-2 bg-[#050b14] border-b border-cyan-900/30 mb-6">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={14} className="text-cyan-500" />
+                <span className="text-[10px] font-mono text-cyan-500 tracking-[0.2em] uppercase">
+                  Recovery_Protocol_V.1
+                </span>
+              </div>
+              <div className="flex gap-1">
+                <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse"></div>
+                <div className="w-1.5 h-1.5 bg-slate-700 rounded-full"></div>
+              </div>
+            </div>
 
-          {/* Input field */}
-          <div className="space-y-5">
-            <Input
-              label="Email"
-              type="email"
-              placeholder="Enter your Email"
-              // This className relies on your styled Input.jsx component
-              className="futuristic-input"
-              disabled={isLoading}
-              {...register("email", {
-                required: true,
-                validate: {
-                  matchPattern: (value) =>
-                    /^(?=.{1,254}$)(?=.{1,64}@)(?![.])(?!.*\.\.)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+(?<![.])@(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$/.test(
-                      value
-                    ) || setError("Invalid email address"),
-                },
-              })}
-            />
-          </div>
-
-          {/* Submit button */}
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className={`relative w-full px-6 py-3.5 text-base font-semibold rounded-lg transition-all duration-300 group overflow-hidden
-          text-white bg-slate-800/60 border border-cyan-500/30 
-          hover:text-white hover:border-cyan-400 hover:bg-cyan-500/20
-          hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] active:scale-[0.98] mt-6
-          ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
-          >
-            {/* Shimmer effect on hover */}
-            <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-cyan-400/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
-
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              {isLoading && (
-                <div className="relative w-5 h-5">
-                  <div className="absolute inset-0 border-2 border-cyan-400/30 rounded-full"></div>
-                  <div className="absolute inset-0 border-2 border-transparent border-t-cyan-400 border-r-purple-400 rounded-full animate-spin"></div>
-                </div>
-              )}
-              {isLoading ? "Sending..." : "Send OTP"}
-            </span>
-          </Button>
-
-          {/* Back to Sign In link */}
-          <p className="text-center text-sm text-slate-400 pt-4">
-            Remembered your password?{" "}
-            <a
-              href="/login"
-              className="font-medium text-cyan-400 hover:text-cyan-300 transition-colors duration-300"
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="p-6 sm:p-10 space-y-8"
             >
-              Sign In
-            </a>
-          </p>
-        </form>
+              {/* Header */}
+              <div className="text-center relative">
+                <div className="inline-flex items-center justify-center p-4 rounded-full border border-cyan-500/10 bg-cyan-950/10 mb-5 relative group-hover:border-cyan-500/30 transition-colors">
+                  <div className="absolute inset-0 bg-cyan-400/5 blur-xl rounded-full"></div>
+                  <Mail
+                    size={28}
+                    className="text-cyan-400 relative z-10"
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <h1 className="text-3xl font-bold text-white mb-2 font-mono tracking-tight uppercase">
+                  Forgot{" "}
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-purple-500">
+                    Password
+                  </span>
+                </h1>
+                <p className="text-slate-500 text-xs font-mono tracking-widest uppercase border-y border-slate-800/50 py-2 mx-auto max-w-60">
+                  Initiate Reset Sequence
+                </p>
+              </div>
+
+              {/* Input field */}
+              <div className="space-y-6">
+                <div className="space-y-1">
+                  {/* We assume Input is your custom robotic component or styled via 'futuristic-input' class. */}
+                  <Input
+                    label="User_Email"
+                    type="email"
+                    placeholder="ENTER EMAIL ADDRESS..."
+                    className="futuristic-input"
+                    disabled={isLoading}
+                    {...register("email", {
+                      required: true,
+                      validate: {
+                        matchPattern: (value) =>
+                          /^(?=.{1,254}$)(?=.{1,64}@)(?![.])(?!.*\.\.)[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+(?<![.])@(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$/.test(
+                            value
+                          ) || setError("Invalid email address"),
+                      },
+                    })}
+                  />
+                </div>
+              </div>
+
+              {/* Submit button */}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className={`relative w-full py-4 text-sm font-bold font-mono uppercase tracking-widest transition-all duration-300 group overflow-hidden bg-transparent mt-6
+                ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
+              >
+                {/* Button Tech Background */}
+                <div className="absolute inset-0 border border-cyan-500/50 bg-cyan-950/20 skew-x-[-10deg] group-hover:border-cyan-400 group-hover:bg-cyan-900/40 transition-all"></div>
+                <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(6,182,212,0.1)_2px,rgba(6,182,212,0.1)_4px)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                {/* Shimmer Animation */}
+                <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-cyan-400/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></span>
+
+                <span className="relative z-10 flex items-center justify-center gap-3 text-cyan-300 group-hover:text-white">
+                  {isLoading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin"></div>
+                      <span>TRANSMITTING...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send
+                        size={16}
+                        className="group-hover:text-yellow-300 transition-colors"
+                      />
+                      SEND_OTP_CODE
+                    </>
+                  )}
+                </span>
+              </Button>
+
+              {/* Back to Sign In link */}
+              <div className="text-center pt-6 border-t border-slate-800/50 mt-4">
+                <p className="text-[10px] text-slate-500 font-mono">
+                  CREDENTIALS_RECOVERED?{" "}
+                  <Link
+                    to="/login"
+                    className="text-cyan-500 hover:text-white transition-colors duration-300 ml-2 border-b border-cyan-900/50 hover:border-cyan-400 pb-0.5 inline-flex items-center gap-1"
+                  >
+                    <ArrowLeft size={10} />
+                    RETURN_TO_LOGIN
+                  </Link>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
 
-      {/* Keyframes needed for the button shimmer */}
       <style>{`
-    @keyframes shimmer {
-      100% { transform: translateX(100%); }
-    }
-  `}</style>
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </Container>
   );
 }

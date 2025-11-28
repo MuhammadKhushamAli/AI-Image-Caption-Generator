@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AlertTriangle, X, Activity, Cpu } from "lucide-react";
 
 export function Error({ error }) {
   const [isVisible, setIsVisible] = useState(true);
@@ -17,44 +18,94 @@ export function Error({ error }) {
   if (!error || !isVisible) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50 animate-slide-in">
-      <div className="relative">
-        {/* Background glow */}
-        <div className="absolute inset-0 bg-red-500/30 blur-2xl rounded-2xl opacity-50"></div>
-        
-        {/* Error container */}
-        <div className="relative backdrop-blur-xl bg-linear-to-br from-red-900/90 via-red-800/70 to-red-900/90 border border-red-500/50 rounded-xl p-4 sm:p-5 shadow-[0_0_30px_rgba(255,0,0,0.3)] min-w-[300px] max-w-md">
-          <div className="flex items-start gap-3">
-            {/* Error icon */}
-            <div className="shrink-0 p-2 rounded-lg bg-red-500/20 border border-red-400/30">
-              <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+    <div className="fixed top-4 right-4 z-50 animate-slide-in font-sans">
+      <div className="relative group">
+        {/* --- Background Glow --- */}
+        <div className="absolute -inset-1 bg-red-500/20 blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+
+        {/* --- Error Container (System Alert Module) --- */}
+        <div className="relative backdrop-blur-xl bg-[#0a111e]/95 border border-red-500/50 p-1 shadow-[0_0_30px_rgba(220,38,38,0.15)] min-w-[320px] max-w-md overflow-hidden">
+          {/* Robotic Corner Brackets */}
+          <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-red-500 z-20"></div>
+          <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-red-500 z-20"></div>
+          <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-red-500/30 z-10"></div>
+          <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-red-500/30 z-10"></div>
+
+          {/* Header Bar */}
+          <div className="flex items-center justify-between bg-red-950/30 border-b border-red-500/30 px-3 py-1 mb-3">
+            <div className="flex items-center gap-2">
+              <Activity size={12} className="text-red-500 animate-pulse" />
+              <span className="text-[10px] font-mono text-red-400 uppercase tracking-[0.2em]">
+                System_Alert
+              </span>
             </div>
-            
-            {/* Error message */}
-            <div className="flex-1">
-              <h3 className="text-red-300 font-semibold mb-1">Alert</h3>
-              <p className="text-red-200 text-sm">{typeof error === 'string' ? error : error?.message || 'An error occurred'}</p>
+            <div className="flex gap-1">
+              <div className="w-1 h-1 bg-red-500"></div>
+              <div className="w-1 h-1 bg-red-800"></div>
             </div>
-            
-            {/* Close button */}
+          </div>
+
+          <div className="px-4 pb-4 flex items-start gap-4">
+            {/* Error Icon Module */}
+            <div className="shrink-0 mt-1">
+              <div className="relative w-10 h-10 flex items-center justify-center border border-red-500/30 bg-red-900/10 clip-path-octagon">
+                <div className="absolute inset-0 border border-red-500/20 rotate-45"></div>
+                <AlertTriangle
+                  className="w-5 h-5 text-red-500 relative z-10"
+                  strokeWidth={1.5}
+                />
+              </div>
+            </div>
+
+            {/* Error Message Content */}
+            <div className="flex-1 min-w-0">
+              <h3 className="text-red-400 font-mono text-xs font-bold uppercase mb-1 flex items-center gap-2">
+                <Cpu size={12} />
+                Critical_Failure
+              </h3>
+              <p className="text-red-200/80 text-xs font-mono leading-relaxed wrap-break-word">
+                {typeof error === "string"
+                  ? error
+                  : error?.message || "An error occurred"}
+              </p>
+            </div>
+
+            {/* Close Button */}
             <button
               onClick={() => setIsVisible(false)}
-              className="shrink-0 p-1 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-colors duration-200"
+              className="shrink-0 p-1 text-red-500/50 hover:text-red-400 hover:bg-red-500/10 rounded-sm transition-all duration-200 border border-transparent hover:border-red-500/30"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X size={16} />
             </button>
           </div>
-          
+
           {/* Progress bar for auto-dismiss */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-red-500/20 rounded-b-xl overflow-hidden">
-            <div className="h-full bg-red-400 animate-progress-bar"></div>
+          <div className="h-1 bg-red-950/50 w-full relative overflow-hidden">
+            <div className="absolute inset-y-0 left-0 h-full bg-red-500 animate-progress-bar origin-left shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
           </div>
         </div>
       </div>
+
+      {/* Local Styles for specific animations matching the logic */}
+      <style>{`
+        @keyframes slide-in {
+          0% { transform: translateX(100%); opacity: 0; }
+          100% { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-in {
+          animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes progress {
+          0% { transform: scaleX(1); }
+          100% { transform: scaleX(0); }
+        }
+        .animate-progress-bar {
+          animation: progress 5s linear forwards;
+        }
+        .clip-path-octagon {
+          clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        }
+      `}</style>
     </div>
   );
 }
