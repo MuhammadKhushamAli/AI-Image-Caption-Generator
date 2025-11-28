@@ -9,6 +9,7 @@ import { Button } from "../components/Button.jsx";
 import { Error } from "../components/Error.jsx";
 import { removeEmail } from "../features/forgetPassword/forgetSlice.js";
 import { ShieldCheck, Terminal, Key, ArrowLeft } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 export function ChangePasswordPage() {
   const { register, handleSubmit } = useForm();
