@@ -107,7 +107,7 @@ export function OTPPage() {
                   </span>
                 </h1>
                 <p className="text-slate-500 text-xs font-mono tracking-widest uppercase border-y border-slate-800/50 py-2 mx-auto max-w-[260px]">
-                  Input 6-Digit Security Token
+                  Input 4-Digit Security Token
                 </p>
               </div>
 
@@ -117,11 +117,11 @@ export function OTPPage() {
                   <Input
                     label="Security_Code"
                     type="number"
-                    placeholder="0 0 0 0 0 0"
+                    placeholder="0 0 0 0"
                     // Custom OTP styling applied here via className
-                    className="futuristic-input font-mono text-3xl text-center tracking-[0.5em] px-4"
+                    className="futuristic-input font-mono text-3xl text-center tracking-[1em] px-4"
                     disabled={isLoading}
-                    maxLength={6}
+                    maxLength={4}
                     {...register("otp", {
                       required: true,
                     })}
