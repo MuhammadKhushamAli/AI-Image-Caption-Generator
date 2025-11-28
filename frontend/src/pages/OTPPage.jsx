@@ -179,23 +179,6 @@ export function OTPPage() {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes shimmer {
-          100% { transform: translateX(100%); }
-        }
-        
-        /* Hides the number input arrows in Chrome, Safari, Edge */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-          -webkit-appearance: none; 
-          margin: 0; 
-        }
-        /* Hides the number input arrows in Firefox */
-        input[type=number] {
-          -moz-appearance: textfield;
-        }
-      `}</style>
     </Container>
   );
 }

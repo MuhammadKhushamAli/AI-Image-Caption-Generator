@@ -86,26 +86,6 @@ export function Error({ error }) {
         </div>
       </div>
 
-      {/* Local Styles for specific animations matching the logic */}
-      <style>{`
-        @keyframes slide-in {
-          0% { transform: translateX(100%); opacity: 0; }
-          100% { transform: translateX(0); opacity: 1; }
-        }
-        .animate-slide-in {
-          animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes progress {
-          0% { transform: scaleX(1); }
-          100% { transform: scaleX(0); }
-        }
-        .animate-progress-bar {
-          animation: progress 5s linear forwards;
-        }
-        .clip-path-octagon {
-          clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-        }
-      `}</style>
     </div>
   );
 }

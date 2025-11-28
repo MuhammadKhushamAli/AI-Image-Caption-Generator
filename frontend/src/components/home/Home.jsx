@@ -504,18 +504,6 @@ export function Home() {
         </>
       )}
 
-      {/* --- Styles for Animations & Glitches --- */}
-      <style>{`
-        @keyframes scan {
-          0% { top: -10%; opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { top: 110%; opacity: 0; }
-        }
-        .clip-path-hexagon {
-           clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
-      `}</style>
     </Container>
   );
 }

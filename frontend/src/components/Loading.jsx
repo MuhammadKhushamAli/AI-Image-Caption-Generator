@@ -171,34 +171,6 @@ export function Loading() {
         </div>
       </div>
 
-      {/* Keyframes for animations */}
-      <style>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes slide-right {
-          0% { left: -50%; }
-          100% { left: 150%; }
-        }
-        @keyframes progress-loading {
-          0% { width: 0%; left: 0; }
-          50% { width: 60%; }
-          100% { width: 100%; }
-        }
-        .clip-path-hexagon {
-           clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        .animate-slide-right {
-          animation: slide-right 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        .animate-progress-loading {
-          animation: progress-loading 2s ease-in-out infinite;
-        }
-      `}</style>
     </Container>
   );
 }

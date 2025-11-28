@@ -23,12 +23,5 @@ export function Button({children, className, onClick, ...props}) {
         {children}
       </span>
 
-      {/* Local Styles for Self-Containment */}
-      <style>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-150%) skewX(-15deg); }
-          100% { transform: translateX(150%) skewX(-15deg); }
-        }
-      `}</style>
     </button>
 }
