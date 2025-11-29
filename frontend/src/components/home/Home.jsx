@@ -290,6 +290,7 @@ export function Home() {
                           audio={false}
                           ref={webCamRef}
                           screenshotFormat="image/jpeg"
+                          videoConstraints={() => {facingMode: "environment"}}
                           className="w-full h-full object-cover relative z-10 opacity-80"
                         />
 
