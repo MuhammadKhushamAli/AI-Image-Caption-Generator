@@ -57,6 +57,11 @@
   100% { top: 110%; opacity: 0; }
 }
 
+.gpu-boost {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
 /* Hides the number input arrows in Chrome, Safari, Edge */
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 

@@ -1,16 +1,33 @@
-import { Scan, Zap, Activity, Wifi } from 'lucide-react';
+import { useCallback, useEffect, useRef } from "react";
+import { Scan, Zap, Activity, Wifi } from "lucide-react";
 
 export function Container({ children, className = "" }) {
+  const animationFrameRef = useRef(null);
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left; // Mouse x position relative to element
-    const y = e.clientY - rect.top;  // Mouse y position relative to element
+  const handleMouseMove = useCallback((e) => {
+    const target = e.currentTarget;
 
-    // Set CSS custom properties (variables) on the element
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
-  };
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+
+    animationFrameRef.current = requestAnimationFrame(() => {
+      const rect = target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      target.style.setProperty("--mouse-x", `${x}px`);
+      target.style.setProperty("--mouse-y", `${y}px`);
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
   const mouseFollowEffect = [
     "before:content-['']",
@@ -35,10 +52,17 @@ export function Container({ children, className = "" }) {
         shadow-[0_0_15px_rgba(6,182,212,0.1)] 
         backdrop-blur-sm
         group
+        gpu-boost
         ${mouseFollowEffect} 
         ${className}
       `}
-      onMouseMove={handleMouseMove} 
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+      }}
     >
       {/* --- Decorative Tech Overlay (Visuals only, no logic) --- */}
       
