@@ -18,7 +18,7 @@ export const addChat = asyncHandler(async (req, res) => {
 
   const form = new FormData();
   form.append("image", fs.createReadStream(image));
-  let caption = await fetch(process.env.MODEL_API, {
+  let caption = await fetch(`${process.env.MODEL_API}/caption`, {
     method: "POST",
     body: form,
   });
@@ -35,6 +35,14 @@ export const addChat = asyncHandler(async (req, res) => {
   const cloudImage = await uploadToCloudinary(image);
   if (!cloudImage)
     throw new ApiError(500, "Unable to Upload Image on Cloudinary");
+
+  let databseUpdationResponse = await fetch(`${process.env.MODEL_API}/update-dataset`, {
+    method: "POST",
+    body: cloudImage?.url,
+  });
+  databseUpdationResponse = await databseUpdationResponse.json();
+  if (databseUpdationResponse.status != 200)
+    throw new ApiError(500, "Unable to Update Database");
 
   const chat = await Chat.create({
     name: req?.file?.filename,

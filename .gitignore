@@ -3,4 +3,4 @@
 /.vscode
 /Backend/*.env
 /Backend./dist
-Caption-Generator-Model
+Model

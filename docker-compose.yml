@@ -26,7 +26,7 @@ services:
       - ai-caption-network
   model:
     image: khushamali/ai-caption-model:v3
-    build: ./Caption-Generator-Model
+    build: ./Model/Caption-Generator-Model
     env_file:
       - ./Caption-Generator-Model/.env
     ports:
