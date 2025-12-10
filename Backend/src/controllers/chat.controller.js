@@ -23,7 +23,6 @@ export const addChat = asyncHandler(async (req, res) => {
     body: form,
   });
   caption = await caption.json();
-
   if (caption.status != 200)
     throw new ApiError(400, "Caption Must be Required");
   const LLMResponse = await LLMModel(
@@ -36,13 +35,24 @@ export const addChat = asyncHandler(async (req, res) => {
   if (!cloudImage)
     throw new ApiError(500, "Unable to Upload Image on Cloudinary");
 
-  let databseUpdationResponse = await fetch(`${process.env.MODEL_API}/update-dataset`, {
-    method: "POST",
-    body: cloudImage?.url,
-  });
-  databseUpdationResponse = await databseUpdationResponse.json();
-  if (databseUpdationResponse.status != 200)
-    throw new ApiError(500, "Unable to Update Database");
+  fetch(
+    `${process.env.MODEL_API}/update-dataset`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: cloudImage?.url,
+      }),
+    }
+  )
+  .then(() => {
+    console.log("Database Updated Successfully");
+  })
+  .catch(() => {
+    console.log("Error in Updating Database");
+  })
 
   const chat = await Chat.create({
     name: req?.file?.filename,

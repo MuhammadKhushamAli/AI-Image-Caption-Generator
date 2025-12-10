@@ -28,7 +28,7 @@ services:
     image: khushamali/ai-caption-model:v3
     build: ./Model/Caption-Generator-Model
     env_file:
-      - ./Caption-Generator-Model/.env
+      - ./Model/Caption-Generator-Model/.env
     ports:
       - "5000:5000"
     restart: unless-stopped
